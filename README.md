@@ -135,7 +135,7 @@ NOT VULN
 - No CVE-2019-11581 vulnerability detected on: https://jira6/secure/ContactAdministrators!default.jspa
 	 **The contact form is not configured and most likely NOT vulnerable.**
 ```
-<img alt="image" src="https://github.com/carnal0wnage/JIRAya/blob/main/img/CVE-2019-11581-notvuln.png">
+<img alt="image" src="https://github.com/carnal0wnage/J-PWN/blob/main/img/CVE-2019-11581-notvuln.png">
 
 
 VULN
@@ -148,4 +148,4 @@ VULN
   2. or an SMTP server has been configured in Jira and an attacker has "JIRA Administrators" access.
   Note:Refer to: https://jira.atlassian.com/browse/JRASERVER-69532 && https://hackerone.com/reports/706841
 ```
-<img alt="image" src="https://github.com/carnal0wnage/JIRAya/blob/main/img/CVE-2019-11581-vuln.png">
+<img alt="image" src="https://github.com/carnal0wnage/J-PWN/blob/main/img/CVE-2019-11581-vuln.png">
