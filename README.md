@@ -1,4 +1,4 @@
-# j-pwn
+# J-PWN
 Jira Vulnerability Enumeration 
 
 This is a fork of https://github.com/anmolksachan/JIRAya
