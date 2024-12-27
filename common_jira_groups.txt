@@ -1,0 +1,17 @@
+Administrators
+bulk-import
+confluence-members
+confluence-nospaces
+confluence-reflections
+confluence-owners
+confluence-users
+confluence-visitors
+crucible-users
+Dev-Ops
+enterprise-approval
+gitlab-developers
+Implementation Team
+jira-administrators
+jira-agile-administrators
+jira-agile-cleareye
+jira-users

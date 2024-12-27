@@ -43,5 +43,5 @@ def check_unauthorized_user_enumeration(url):
             print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}{Style.RESET_ALL}")
 
     except Exception as e:
-            print(f"{Fore.RED}*  An error occurred while checking {open_project_filter_url}: {e}{Style.RESET_ALL}")
+            print(f"{Fore.RED}*  An error occurred while checking {unauthorized_user_enumeration_url}: {e}{Style.RESET_ALL}")
     return vulnerabilities
