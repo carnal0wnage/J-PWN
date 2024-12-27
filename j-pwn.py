@@ -41,36 +41,19 @@ def banner():
 
 def test_jira_vulns(url):
     vulnerabilities= []
-    dashboard_url = f"{url}rest/api/2/dashboard?maxResults=100"
-    project_category_url = f"{url}rest/api/2/projectCategory?maxResults=1000"
-    resolution_url = f"{url}rest/api/2/resolution"
-    project_url = f"{url}rest/api/2/project?maxResult=100"
-    admin_projects_url = f"{url}rest/menu/latest/admin"
-    service_desk_url = f"{url}servicedesk/customer/user/login"
-    service_desk_signup = f"{url}servicedesk/customer/user/signup"  #todo
-    signup_url = f"{url}secure/Signup!default.jspa"
-    open_project_dashboard_url = f"{url}secure/ConfigurePortalPages!default.jspa?view=popular"
-    open_project_filter_url = f"{url}secure/ManageFilters.jspa?filterView=search&Search=Search&filterView=search&sortColumn=favcount&sortAscending=false"
-
+    
     gadgets_url = f"{url}rest/config/1.0/directory"
-
-
-    query_component_url = f"{url}rest//secure/QueryComponent!Default.jspa"
-    user_picker_url = f"{url}rest/api/2/user/picker?query=admin"
-    JRASERVER_url = f"{url}rest/api/latest/groupuserpicker?query=1&maxResults=50000&showAvatar=true"
+    
     collaborator = "https://google.com"
     #print ("+ Using collaborator as:", collaborator)
     #collaborator = f"https://victomhost:1337@example.com" #ask user for collaborator URL
     #cve20198451 = f"{url}/plugins/servlet/gadgets/makeRequest?url={collaborator}" #/plugins/servlet/gadgets/makeRequest?url=
-    contact_admin_url = f"{url}secure/ContactAdministrators!default.jspa"
+    
     CVE201820824 = f"{url}plugins/servlet/Wallboard/?dashboardId=10000&dashboardId=10000&cyclePeriod=alert(document.domain)"
-    cve202014179 = f"{url}secure/QueryComponent!Default.jspa"
-    cve202014181 = f"{url}ViewUserHover.jspa?username=Admin"
-    cve202014181_1 = f"{url}secure/ViewUserHover.jspa"
+   
     cve20185230 = f"{url}issues/"
     jupf = f"{url}secure/ManageFilters.jspa?filter=popular&filterView=popular"
     xss = f"{url}pages/%3CIFRAME%20SRC%3D%22javascript%3Aalert(‘XSS’)%22%3E.vm"
-    cve20193403 = f"{url}rest/api/2/user/picker?query=admin"
     cve20198442_url = f"{url}s/thiscanbeanythingyouwant/_/META-INF/maven/com.atlassian.jira/atlassian-jira-webapp/pom.xml"
     cve20179506 = f"{url}plugins/servlet/oauth/users/icon-uri?consumerUri={collaborator}"
     cve20193402 = f"{url}secure/ConfigurePortalPages!default.jspa?view=search&searchOwnerUserName=x2rnu%3Cscript%3Ealert(1)%3C%2fscript%3Et1nmk&Search=Search"
@@ -80,29 +63,36 @@ def test_jira_vulns(url):
     cve202205401 = f"{url}secure/WBSGanttManageScheduleJobAction.jspa;"
 
 
+    #todo /rest/api/2/user/search?username=.&maxResults=1000
+    #todo /rest/project-templates/1.0/createshared
 
 
     # Check for unauthenticated access to JIRA dashboards
+    # {url}rest/api/2/dashboard?maxResults=100
     check_result = check_unauthenticated_dashboard_access(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
     # Check for unauthenticated access to JIRA project categories
+    # {url}rest/api/2/projectCategory?maxResults=1000
     check_result = check_unauthenticated_project_categories(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
     # Check for unauthenticated access to projects
+    # {url}rest/api/2/project?maxResults=100
     check_result = check_unauthenticated_projects(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
     # Check for unauthenticated access to JIRA resolutions
+    # {url}rest/api/2/resolution
     check_result = check_unauthenticated_resolutions(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
     # Check for unauthenticated access to JIRA admin projects
+    # {url}rest/menu/latest/admin?maxResults=1000
     check_result = check_unauthenticated_admin_projects(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
@@ -118,21 +108,25 @@ def test_jira_vulns(url):
 
 
     # Checks for open Jira signup. Manually attempt to signup
+    # {url}secure/Signup!default.jspa
     check_result = check_open_jira_signup(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-    # Check for open project dashboard
-    check_result = check_open_project_dashboard(url)
+    # Check for open popular dashboard
+    # {url}secure/ConfigurePortalPages!default.jspa?view=popular
+    check_result = check_unauthenticated_popular_dashboard(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
     # Check for open project filter
-    check_result = check_open_project_filter(url)
+    # {url}secure/ManageFilters.jspa?filterView=search&Search=Search&filterView=search&sortColumn=favcount&sortAscending=false
+    check_result = check_unauthenticated_popular_filter(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
     
-    # Check for Unauthorized User Enumeration (UserPickerBrowser.jspa
+    # Check for Unauthorized User Enumeration (UserPickerBrowser.jspa)
+    # {url}secure/popups/UserPickerBrowser.jspa
     check_result = check_unauthorized_user_enumeration(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
@@ -142,18 +136,40 @@ def test_jira_vulns(url):
     '''
 
     # Check for CVE-2019-3403
+    # {url}rest/api/2/user/picker?query=admin
     check_result = check_cve_2019_3403(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
+    # Check for CVE-2019-8449
+    # {url}rest/api/latest/groupuserpicker?query=1&maxResults=50000&showAvatar=true
+    check_result = check_cve_2019_8449(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
 
-    # Check for CVE-2020-14179
-    try:
-        response = requests.get(query_component_url, verify=False)
-        if response.status_code == 200 and "custom field" in response.text:
-            vulnerabilities.append(f"+ CVE-2020-14179 : Information disclosure about custom fields and custom SLA | URL : {query_component_url}")
-    except:
-        pass
+    # Check for CVE-2019-11581
+    # {url}secure/ContactAdministrators!default.jspa
+    check_result = check_cve_2019_11581(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    # Check for CVE_2020-14178
+    # {url]browse.PROJECTNAME(KEY)
+    check_result = check_cve_2020_14178(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    # Check for CVE_2020-14179
+    # {url]secure/QueryComponent!Default.jspa
+    check_result = check_cve_2020_14179(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    # Check for CVE_2020-14181
+    # {url}secure/ViewUserHover.jspa?username=ishouldntexist
+    check_result = check_cve_2020_14181(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
 
     # Check for CVE-2022-0540
     try:
@@ -172,46 +188,6 @@ def test_jira_vulns(url):
         pass
 
 
-    # Check for CVE-2019-8449
-    def check_cve_2019_8449(url):
-        JRASERVER_url = f"{url}rest/api/latest/groupuserpicker?query=1&maxResults=50000&showAvatar=true"
-
-    try:
-        response = requests.get(JRASERVER_url, verify=False)
-
-        # Check for the vulnerability and parse the response
-        if response.status_code == 200 and "users" in response.text:
-            vulnerabilities.append(f"+ CVE-2019-8449: The /rest/api/latest/groupuserpicker resource in Jira before version 8.4.0 allows remote attackers to enumerate usernames via an information disclosure vulnerability. | URL : {JRASERVER_url}")
-
-            data = response.json()
-            users = data.get("users", {}).get("users", [])
-            total_users = data.get("users", {}).get("total", "N/A")
-            user_header = data.get("users", {}).get("header", "N/A")
-
-            groups = data.get("groups", {}).get("groups", [])
-            total_groups = data.get("groups", {}).get("total", "N/A")
-            group_header = data.get("groups", {}).get("header", "N/A")
-
-            print(f"\n{Fore.GREEN}+ CVE-2019-8449 Detected{Style.RESET_ALL}")
-            print(f"  URL: {JRASERVER_url}")
-            print(f"  Total Users Found: {total_users}")
-            print(f"  User Header: {user_header}")
-            print(f"  User Details: {users if users else 'No users listed.'}")
-            print(f"  Total Groups Found: {total_groups}")
-            print(f"  Group Header: {group_header}")
-            print(f"  Group Details: {groups if groups else 'No groups listed.'}")
-        elif response.status_code == 403:
-            print(f"{Fore.YELLOW}\n- No CVE-2019-8449 vulnerability detected on: {JRASERVER_url}{Style.RESET_ALL}")
-
-        else:
-            print(f"{Fore.YELLOW}\n- No CVE-2019-8449 vulnerability detected on: {JRASERVER_url}{Style.RESET_ALL}")
-    except json.JSONDecodeError:
-        print(f"{Fore.RED}- Failed to parse JSON response from: {JRASERVER_url}{Style.RESET_ALL}")
-    except Exception as e:
-        print(f"{Fore.RED}- An error occurred while checking {JRASERVER_url} error:{e}{Style.RESET_ALL}")
- 
-    check_cve_2019_8449(url)
-
     #cve-2019-8451:ssrf-response-body    
     try:
         response = requests.get(cve20198451, verify=False)
@@ -220,52 +196,7 @@ def test_jira_vulns(url):
     except:
         pass
 
-   
-  
-
-
     
-    
-
-    def check_cve_2019_11581(url):
-        '''
-        Checks for CVE-2019-11581, a potential Remote Code Execution vulnerability in Jira.
-        '''
-        contact_admin_url = f"{url}secure/ContactAdministrators!default.jspa"
-
-    try:
-        response = requests.get(contact_admin_url, verify=False)
-
-        # Check for the vulnerability
-        if response.status_code == 200:
-            response_text = response.text
-            # print(response_text) DEBUG
-
-            if ("administrator has not yet configured" in response_text or 
-                "no ha configurado" in response_text or "noch nicht konfiguriert" in response_text or "не настроил эту контактную форму" in response_text or "管理员尚未配置此联系表" in response_text):
-                print(f"{Fore.YELLOW}\n- No CVE-2019-11581 vulnerability detected on: {contact_admin_url}") 
-                print(f"{Fore.YELLOW}\t **The contact form is not configured and most likely NOT vulnerable.**{Style.RESET_ALL}")
-                # print(f"  URL: {contact_admin_url}")
-            else:
-                vulnerabilities.append(f"+ CVE-2019-11581 [Potential RCE]: Manual exploitation required | URL: {contact_admin_url}")
-                print(f"\n{Fore.GREEN}+ CVE-2019-11581 Detected - The contact form is configured and potential vulnerable [MANUAL REVIEW REQUIRED]{Style.RESET_ALL}")
-                print(f"  URL: {contact_admin_url}")
-                print(f"  Note: Exploitation requires manual steps.")
-                print(f"  Note: For this issue to be exploitable at least one of the following conditions must be met:")
-                print(f"  1. An SMTP server has been configured in Jira and the Contact Administrators Form is enabled")
-                print(f"  2. or an SMTP server has been configured in Jira and an attacker has \"JIRA Administrators\" access.")
-                print(f"  Note:Refer to: https://jira.atlassian.com/browse/JRASERVER-69532 && https://hackerone.com/reports/706841")
-        elif response.status_code == 403:
-            print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}")
-
-        else:
-            print(f"{Fore.YELLOW}- No CVE-2019-11581 vulnerability detected on: {contact_admin_url}{Style.RESET_ALL}")
-            print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}{Style.RESET_ALL}")
-
-    except Exception as e:
-            print(f"{Fore.RED}* CVE-2019-11581 An error occurred while checking {contact_admin_url}: {e}{Style.RESET_ALL}")
-
-    check_cve_2019_11581(url)
 
     #cve-2018-20824
     try:
@@ -275,29 +206,7 @@ def test_jira_vulns(url):
     except:
         pass 
 
-    #cve-2020-14179 
-    try:
-        response = requests.get(cve202014179, verify=False)
-        if response.status_code == 200 in response.text:
-            vulnerabilities.append(f"+ CVE-2020-14179 [Information Disclosure] : Atlassian Jira Server and Data Center allow remote, unauthenticated attackers to view custom field names and custom SLA names via an Information Disclosure vulnerability in the /secure/QueryComponent!Default.jspa endpoint. | URL : {cve202014179}")
-    except:
-        pass 
 
-    #cve-2020-14181 
-    try:
-        response = requests.get(cve202014181, verify=False)
-        if response.status_code == 200 and "admin" in response.text:
-            vulnerabilities.append(f"+ CVE-2020-14181 [User Enumeration] : Atlassian Jira Server and Data Center allow an unauthenticated user to enumerate users via an Information Disclosure vulnerability in the /ViewUserHover.jspa endpoint. | URL : {cve202014181}")
-    except:
-        pass    
-
-    #cve-2020-14181 test case 2 
-    try:
-        response = requests.get(cve202014181_1, verify=False)
-        if response.status_code == 200 in response.text:
-            vulnerabilities.append(f"+ CVE-2020-14181 [User Enumeration] : Atlassian Jira Server and Data Center allow an unauthenticated user to enumerate users via an Information Disclosure vulnerability in the /ViewUserHover.jspa endpoint. | URL : {cve202014181_1}")
-    except:
-        pass 
 
     #CVE-2018-5230 = /issues/
     try:
@@ -413,14 +322,18 @@ def test_jira_vulns(url):
     '''
     Service Desk Checks and Modules go here
     '''
+
+    # {url}rest/servicedeskapi/info
     check_servicedesk_info(url)
 
     # Checks for open service desk login. Manually attempt to signup
+    # {url}servicedesk/customer/user/login
     check_result = check_open_servicedesk_login(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
     # Checks for open service desk signup. Manually attempt to signup
+    # {url}servicedesk/customer/user/signup
     check_result = check_open_servicedesk_signup(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
