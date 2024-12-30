@@ -19,7 +19,7 @@ def check_unauthenticated_resolutions(url):
         response = requests.get(resolution_url, verify=False)
 
         if response.status_code == 200:
-            vulnerabilities += (f"+ Unauthenticated access to JIRA resolutions | URL : {resolution_url}")
+            vulnerabilities += (f"+ [Info Disclosure] Unauthenticated access to JIRA resolutions | URL : {resolution_url}")
 
             data = response.json()
 

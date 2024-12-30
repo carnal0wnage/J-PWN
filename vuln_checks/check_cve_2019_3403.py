@@ -22,7 +22,7 @@ def check_cve_2019_3403(url):
 
         # Check for the vulnerability and parse the response
         if response.status_code == 200 and "users" in response.text:
-            vulnerabilities += (f"+ [Info Disclosure] - CVE-2019-3403: Information disclosure of all existing users on the JIRA server | URL : {user_picker_url}")
+            vulnerabilities += (f"+ [Username Enumeration] CVE-2019-3403: Information disclosure of all existing users on the JIRA server | URL : {user_picker_url}")
 
             data = response.json()
             users = data.get("users", [])

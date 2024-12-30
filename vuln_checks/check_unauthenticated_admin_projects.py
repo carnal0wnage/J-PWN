@@ -22,7 +22,7 @@ def check_unauthenticated_admin_projects(url):
 
         # Check for unauthenticated access and parse the response
         if response.status_code == 200:
-            vulnerabilities += (f"+ Unauthenticated access to JIRA admin projects | URL : {admin_projects_url}")
+            vulnerabilities += (f"+ [Info Disclosure] Unauthenticated access to JIRA admin projects | URL : {admin_projects_url}")
 
             data = response.json()
 

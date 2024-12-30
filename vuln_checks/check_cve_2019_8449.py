@@ -21,7 +21,7 @@ def check_cve_2019_8449(url):
 
         # Check for the vulnerability and parse the response
         if response.status_code == 200 and "users" in response.text:
-            vulnerabilities += (f"+ [Username Enumeration - CVE-2019-8449: The /rest/api/latest/groupuserpicker resource in Jira before version 8.4.0 allows remote attackers to enumerate usernames. | URL : {cve_2019_8449_url}")
+            vulnerabilities += (f"+ [Username Enumeration] CVE-2019-8449: The /rest/api/latest/groupuserpicker resource in Jira before version 8.4.0 allows remote attackers to enumerate usernames. | URL : {cve_2019_8449_url}")
 
             data = response.json()
             users = data.get("users", {}).get("users", [])

@@ -18,13 +18,13 @@ def check_cve_2020_14179(url):
         response = requests.get(cve202014179_url, verify=False)
 
         if response.status_code == 200 and "searchers" in response.text:
-            vulnerabilities += f"+ [Info Disclosure] - CVE-2020-14179: Sensitive information exposed at {cve202014179_url}\n"
+            vulnerabilities += f"+ [Info Disclosure] CVE-2020-14179: Sensitive information exposed at {cve202014179_url}"
 
             data = response.json()
 
             # Process "searchers" field
             searchers_groups = data.get("searchers", {}).get("groups", [])
-            print(f"\n{Fore.GREEN}+ [Info Disclosure] - CVE-2020-14179 Detected: Searchers Information  [Review Manually]{Style.RESET_ALL}")
+            print(f"\n{Fore.GREEN}+ [Info Disclosure] CVE-2020-14179 Detected: Searchers Information  [Review Manually]{Style.RESET_ALL}")
             print(f"  URL: {cve202014179_url}")
             for group in searchers_groups:
                 group_title = group.get("title", "Unknown Group")

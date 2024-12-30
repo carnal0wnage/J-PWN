@@ -21,7 +21,7 @@ def check_unauthenticated_project_categories(url):
 
         # Check for unauthenticated access and parse the response
         if response.status_code == 200:
-            vulnerabilities += (f"+ Unauthenticated access to JIRA project categories | URL : {project_category_url}")
+            vulnerabilities += (f"+ [Info Disclosure] Unauthenticated access to JIRA project categories | URL : {project_category_url}")
 
             data = response.json()
 

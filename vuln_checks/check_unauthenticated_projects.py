@@ -19,7 +19,7 @@ def check_unauthenticated_projects(url):
         response = requests.get(project_url, verify=False)
 
         if response.status_code == 200:
-            vulnerabilities += (f"+ Unauthenticated access to JIRA projects | URL : {project_url}")
+            vulnerabilities += (f"+ [Info Disclosure] Unauthenticated access to JIRA projects | URL : {project_url}")
 
             data = response.json()
 

