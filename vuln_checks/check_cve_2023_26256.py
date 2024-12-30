@@ -18,9 +18,9 @@ def check_cve_2023_26256(url):
     vulnerabilities = ''
 
     try:
-        print(f"{Fore.YELLOW}\nINFO: IN DEVELOPMENT - CVE-2023-26256")
+        print(f"{Fore.YELLOW}\nINFO: IN DEVELOPMENT Checking for CVE-2023-26256")
         response = requests.get(check_cve_2023_26256_url, allow_redirects=False, verify=False)
-        print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}")
+        #print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}")
 
         # Check for the vulnerability
         if response.status_code == 200:

@@ -18,6 +18,7 @@ def check_cve_2022_0540_v1(url):
     vulnerabilities = ''
 
     try:
+        print(f"\n{Fore.YELLOW}INFO: Checking for CVE-2022-0540 (Insight Variant){Style.RESET_ALL}")
         response = requests.get(check_cve_2022_0540_v1_url, allow_redirects=False, verify=False)
 
         # Check for the vulnerability

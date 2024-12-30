@@ -18,6 +18,7 @@ def check_cve_2019_3403(url):
     vulnerabilities = ''
 
     try:
+        print(f"{Fore.YELLOW}\nINFO: Checking for CVE-2019-3403{Style.RESET_ALL}")
         response = requests.get(user_picker_url, verify=False)
 
         # Check for the vulnerability and parse the response

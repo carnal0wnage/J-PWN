@@ -18,6 +18,7 @@ def check_cve_2019_11581(url):
     vulnerabilities = ''
 
     try:
+        print(f"\n{Fore.YELLOW}INFO: Checking for CVE-2019-11581{Style.RESET_ALL}")
         response = requests.get(contact_admin_url, verify=False)
 
         # Check for the vulnerability

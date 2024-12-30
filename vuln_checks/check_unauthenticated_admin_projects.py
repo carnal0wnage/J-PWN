@@ -18,6 +18,7 @@ def check_unauthenticated_admin_projects(url):
     vulnerabilities = ''  # Local vulnerabilities list
 
     try:
+        print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Access to JIRA Admin Projects{Style.RESET_ALL}")
         response = requests.get(admin_projects_url, verify=False)
 
         # Check for unauthenticated access and parse the response

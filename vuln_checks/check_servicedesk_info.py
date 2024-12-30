@@ -11,7 +11,7 @@ import urllib3
 
 
 def check_servicedesk_info(url):
-    print(f"{Fore.YELLOW}\n- Running JIRA Service Desk Checks{Style.RESET_ALL}")
+    print(f"{Fore.YELLOW}\n[INFO] JIRA Service Desk Checks{Style.RESET_ALL}")
     servicedesk_url = f"{url}rest/servicedeskapi/info"
     vulnerabilities = ''
 

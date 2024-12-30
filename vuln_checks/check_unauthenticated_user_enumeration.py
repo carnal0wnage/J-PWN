@@ -17,7 +17,7 @@ def check_unauthenticated_user_enumeration(url):
     vulnerabilities = ''
         
     try:
-        print(f"{Fore.YELLOW}\nINFO: IN DEVELOPMENT - Unauthenticated User Enumeration (UserPickerBrowser.jspa)")
+        print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated User Enumeration (UserPickerBrowser.jspa)")
         response = requests.get(unauthenticated_user_enumeration_url, allow_redirects=False, verify=False)
 
         # Check for the vulnerability

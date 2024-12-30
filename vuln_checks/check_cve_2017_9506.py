@@ -62,7 +62,7 @@ def check_cve_2017_9506(base_url, output_folder=""):
                 print(f"\n{Fore.GREEN}Exfiltrated data written to: {filepath}{Style.RESET_ALL}")
 
         else:
-            print(f"{Fore.YELLOW}[-] Not Vulnerable to CVE-2017-9506{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}- Not Vulnerable to CVE-2017-9506{Style.RESET_ALL}")
     except Exception as e:
         print(f"{Fore.RED}* An error occurred while checking {base_url}: {e}{Style.RESET_ALL}")
 

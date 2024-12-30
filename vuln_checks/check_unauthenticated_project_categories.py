@@ -17,6 +17,7 @@ def check_unauthenticated_project_categories(url):
     vulnerabilities = ''  # Local vulnerabilities list
 
     try:
+        print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Access to JIRA Project Categories{Style.RESET_ALL}")
         response = requests.get(project_category_url, verify=False)
 
         # Check for unauthenticated access and parse the response

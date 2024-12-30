@@ -18,7 +18,7 @@ def check_unauthenticated_installed_gadgets(url):
     vulnerabilities = ''
         
     try:
-        # print(f"{Fore.YELLOW}\nChecking for  Unauthenticated Installed Gadgets")
+        print(f"{Fore.YELLOW}\nChecking for Unauthenticated Installed Gadgets")
         response = requests.get(unauthenticated_installed_gadgets_url, allow_redirects=False, verify=False)
 
         # Check for the vulnerability

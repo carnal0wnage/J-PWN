@@ -15,6 +15,7 @@ def check_cve_2020_14179(url):
     vulnerabilities = ""
 
     try:
+        print(f"\n{Fore.YELLOW}INFO: Checking for CVE-2020-14179{Style.RESET_ALL}")
         response = requests.get(cve202014179_url, verify=False)
 
         if response.status_code == 200 and "searchers" in response.text:

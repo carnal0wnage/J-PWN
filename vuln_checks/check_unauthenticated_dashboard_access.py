@@ -16,6 +16,7 @@ def check_unauthenticated_dashboard_access(url):
     vulnerabilities = ''  # Local vulnerabilities list
 
     try:
+        print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Access to JIRA Dashboards{Style.RESET_ALL}")
         response = requests.get(dashboard_url, verify=False)
 
         # Check for unauthenticated access and parse the response

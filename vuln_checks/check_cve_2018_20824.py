@@ -34,7 +34,7 @@ def check_cve_2018_20824(base_url):
             print(f"{Fore.GREEN}[+] [XSS] Vulnerable to CVE-2018-20824: {check_cve_2018_20824_url}{Style.RESET_ALL}")
             print(f"{Fore.GREEN}[+] URL: {manual_cve_2018_20824_url}{Style.RESET_ALL}")
         else:
-            print(f"{Fore.YELLOW}[-] Not Vulnerable to CVE-2018-20824{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}- Not Vulnerable to CVE-2018-20824{Style.RESET_ALL}")
     except Exception as e:
         print(f"{Fore.RED}* An error occurred while checking {base_url}: {e}{Style.RESET_ALL}")
 

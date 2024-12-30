@@ -16,6 +16,7 @@ def check_unauthenticated_resolutions(url):
     vulnerabilities = ''  # Local vulnerabilities list
 
     try:
+        print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Access to JIRA Resolutions{Style.RESET_ALL}")
         response = requests.get(resolution_url, verify=False)
 
         if response.status_code == 200:

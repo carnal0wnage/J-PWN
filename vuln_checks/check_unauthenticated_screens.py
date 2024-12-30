@@ -31,8 +31,8 @@ def check_unauthenticated_screens(base_url):
             vulnerabilities += vulnerability_detail
             print(f"{Fore.GREEN}[+] [INFO DISCLOSURE] Unauthenticated Access to Screens: {check_unauth_screens_url}{Style.RESET_ALL}")
         else:
-            print(f"{Fore.YELLOW}[-] No Unauthenticated Access to Screens Found{Style.RESET_ALL}")
-            print(f"{Fore.YELLOW}[-] HTTP Code: {response.status_code}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}- No Unauthenticated Access to Screens Found{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}- HTTP Code: {response.status_code}{Style.RESET_ALL}")
     except Exception as e:
         print(f"{Fore.RED}* An error occurred while checking {base_url}: {e}{Style.RESET_ALL}")
 
