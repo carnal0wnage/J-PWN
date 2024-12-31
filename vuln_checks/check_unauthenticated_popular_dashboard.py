@@ -18,18 +18,18 @@ def check_unauthenticated_popular_dashboard(url):
         
     try:
         print(f"{Fore.YELLOW}\nINFO: IN DEVELOPMENT - Unauthenticated Popular Dashboard")
+        print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {check_unauthenticated_popular_dashboard_url}")
         response = requests.get(check_unauthenticated_popular_dashboard_url, allow_redirects=False, verify=False)
 
         # Check for the vulnerability
-        if response.status_code == 200:
+        if response.status_code == 200 and "Shared With" in response.text or "Share with" in response.text or "共享给" in response.text:
             response_text = response.text
             # print(response_text) #DEBUG
-
-
             vulnerabilities += (f"+ [Info Disclosure] Unauthenticated Popular Dashboard Found | URL: {check_unauthenticated_popular_dashboard_url}")
-            print(f"\n{Fore.GREEN}+ Unauthenticated Popular Dashboard Found [Manually Inspect] {Style.RESET_ALL}")
+            print(f"\n{Fore.GREEN}+ [Info Disclosure] Unauthenticated Popular Dashboard Found [Manually Inspect] {Style.RESET_ALL}")
             print(f"  URL: {check_unauthenticated_popular_dashboard_url}")
-           
+        elif response.status_code == 200 :
+            print(f"\n{Fore.YELLOW}[-] No Unauthenticated Popular Dashboard vulnerability  | No Shared Popular Dashboards found {Style.RESET_ALL}")
         elif response.status_code == 403:
             print(f"{Fore.YELLOW}\n- No Unauthenticated Popular Dashboard vulnerability detected on: {check_unauthenticated_popular_dashboard_url}{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}{Style.RESET_ALL}")

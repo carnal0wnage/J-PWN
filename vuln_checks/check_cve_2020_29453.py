@@ -32,7 +32,7 @@ def check_cve_2020_29453(url):
     ]
     
     for target_url in urls_to_check:
-        print(f"{Fore.YELLOW}\n- Checking URL: {target_url}")
+        print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {target_url}")
         try:
             # Stream response to handle large files
             response = requests.get(target_url, verify=False, allow_redirects=False, stream=True)

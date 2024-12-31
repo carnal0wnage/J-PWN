@@ -32,7 +32,7 @@ def check_cve_2019_3402(base_url):
 
         # Check for the XSS payload in the response
         if "XSS_TEST" in response.text:
-            vulnerability_detail = f"[XSS] Vulnerable to CVE-2019-3402: {check_cve_2019_3402_url}"
+            vulnerability_detail = f"+ [XSS] Vulnerable to CVE-2019-3402: {check_cve_2019_3402_url}"
             vulnerabilities += vulnerability_detail
             print(f"{Fore.GREEN}[+] [XSS] Vulnerable to CVE-2019-3402: {check_cve_2019_3402_url}{Style.RESET_ALL}")
             print(f"{Fore.GREEN}[+] URL: {manual_cve_2019_3402_url}{Style.RESET_ALL}")

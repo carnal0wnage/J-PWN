@@ -29,7 +29,7 @@ def check_cve_2018_20824(base_url):
 
         # Check for the XSS payload in the response
         if "XSS12345" in response.text:
-            vulnerability_detail = (f"[XXS] Vulnerable to CVE-2018-20824: {check_cve_2018_20824_url}")
+            vulnerability_detail = (f"+ [XXS] Vulnerable to CVE-2018-20824: {check_cve_2018_20824_url}")
             vulnerabilities += (vulnerability_detail)
             print(f"{Fore.GREEN}[+] [XSS] Vulnerable to CVE-2018-20824: {check_cve_2018_20824_url}{Style.RESET_ALL}")
             print(f"{Fore.GREEN}[+] URL: {manual_cve_2018_20824_url}{Style.RESET_ALL}")

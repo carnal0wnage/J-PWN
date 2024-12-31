@@ -18,6 +18,7 @@ def check_unauthenticated_popular_filter(url):
         
     try:
         print(f"{Fore.YELLOW}\nINFO: IN DEVELOPMENT - Unauthenticated Popular Filter")
+        print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {open_popular_filter_url}")
         response = requests.get(open_popular_filter_url, allow_redirects=False, verify=False)
 
         # Check for the vulnerability

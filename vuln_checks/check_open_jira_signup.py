@@ -18,6 +18,7 @@ def check_open_jira_signup(url):
 
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for Open JIRA Signup")
+        print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {signup_url}")
         response = requests.get(signup_url, allow_redirects=False, verify=False)
 
         # Check for the vulnerability

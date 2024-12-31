@@ -12,23 +12,33 @@ from urllib.parse import urlparse
 import urllib3
 
 def check_unauthenticated_projects(url):
-    project_url = f"{url}rest/api/2/project?maxResults=100"
+    """
+    Checks for unauthenticated access to JIRA projects via /rest/api/2/project.
+    """
+    project_url = f"{url.rstrip('/')}/rest/api/2/project?maxResults=100"
     vulnerabilities = ''  # Local vulnerabilities list
 
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Access to JIRA Projects{Style.RESET_ALL}")
+        print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {project_url}")
         response = requests.get(project_url, verify=False)
 
         if response.status_code == 200:
-            vulnerabilities += (f"+ [Info Disclosure] Unauthenticated access to JIRA projects | URL : {project_url}")
-
+            # Parse the JSON response
             data = response.json()
 
-            print(f"\n{Fore.GREEN}+ Unauthenticated Access to JIRA Projects Detected{Style.RESET_ALL}")
-            print(f"  URL: {project_url}")
-            print("\n  Projects Details:")
+            if isinstance(data, list) and not data:  # Check for an empty list
+                print(f"{Fore.YELLOW}- No projects found (Empty Results).{Style.RESET_ALL}")
+                pass
+                # return "empty results"
+            elif isinstance(data, list) and data:
+                # If data is not empty, continue processing
+                vulnerabilities += f"+ [Info Disclosure] Unauthenticated access to JIRA projects | URL : {project_url}"
 
-            if data:
+                print(f"\n{Fore.GREEN}+ Unauthenticated Access to JIRA Projects Detected{Style.RESET_ALL}")
+                print(f"  URL: {project_url}")
+                print("\n  Projects Details:")
+
                 for project in data:
                     project_id = project.get("id", "N/A")
                     key = project.get("key", "N/A")
@@ -41,10 +51,8 @@ def check_unauthenticated_projects(url):
                     print(f"      Name: {name}")
                     print(f"      Type: {project_type}")
                     print(f"      API URL: {self_url}\n")
-            else:
-                print("    No projects found.")
         else:
-            print(f"{Fore.YELLOW}\n- No unauthenticated access to JIRA projects detected on: {project_url}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}- No unauthenticated access to JIRA projects detected on: {project_url}{Style.RESET_ALL}")
 
     except requests.exceptions.JSONDecodeError:
         print(f"{Fore.RED}- Failed to parse JSON response from: {project_url}{Style.RESET_ALL}")

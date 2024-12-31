@@ -17,6 +17,7 @@ def check_unauthenticated_dashboard_access(url):
 
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Access to JIRA Dashboards{Style.RESET_ALL}")
+        print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {dashboard_url}")
         response = requests.get(dashboard_url, verify=False)
 
         # Check for unauthenticated access and parse the response

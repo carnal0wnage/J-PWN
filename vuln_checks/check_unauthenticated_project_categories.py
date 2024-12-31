@@ -18,6 +18,7 @@ def check_unauthenticated_project_categories(url):
 
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Access to JIRA Project Categories{Style.RESET_ALL}")
+        print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {project_category_url}")
         response = requests.get(project_category_url, verify=False)
 
         # Check for unauthenticated access and parse the response

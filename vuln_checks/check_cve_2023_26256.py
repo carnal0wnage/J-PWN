@@ -19,6 +19,7 @@ def check_cve_2023_26256(url):
 
     try:
         print(f"{Fore.YELLOW}\nINFO: IN DEVELOPMENT Checking for CVE-2023-26256")
+        print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {check_cve_2023_26256_url}")
         response = requests.get(check_cve_2023_26256_url, allow_redirects=False, verify=False)
         #print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}")
 

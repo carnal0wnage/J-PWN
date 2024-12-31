@@ -18,7 +18,8 @@ def check_cve_2019_8449(url):
     
     try:
         print(f"\n{Fore.YELLOW}INFO: Checking for CVE-2019-8449{Style.RESET_ALL}")
-        response = requests.get(cve_2019_8449_url, verify=False)
+        print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {cve_2019_8449_url}")
+        response = requests.get(cve_2019_8449_url, allow_redirects=False, verify=False)
 
         # Check for the vulnerability and parse the response
         if response.status_code == 200 and "users" in response.text:

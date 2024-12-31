@@ -109,12 +109,6 @@ def test_jira_vulns(url):
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-    # Check for Unauthenticated popular project filter
-    # {url}secure/ManageFilters.jspa?filterView=search&Search=Search&filterView=search&sortColumn=favcount&sortAscending=false
-    check_result = check_unauthenticated_popular_filter(url)
-    if check_result:  # Only append if check_result is not empty
-        vulnerabilities.append(check_result)
-
     # Check for Unauthenticated User Enumeration (UserPickerBrowser.jspa)
     # {url}secure/popups/UserPickerBrowser.jspa
     check_result = check_unauthenticated_user_enumeration(url)
@@ -159,6 +153,12 @@ def test_jira_vulns(url):
     # Check for CVE-2018-20824 (XSS vulnerability in Wallboard)
     # {url}plugins/servlet/Wallboard/?dashboardId=10000&dashboardId=10000&cyclePeriod=alert(document.cookie))
     check_result = check_cve_2018_20824(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    # Check for cve-2019-3401
+    # {url}secure/ManageFilters.jspa?filterView=search&Search=Search&filterView=search&sortColumn=favcount&sortAscending=false
+    check_result = check_cve_2019_3401(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
@@ -219,6 +219,18 @@ def test_jira_vulns(url):
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
+    # Check for CVE-2021-26086
+    # f"{url.rstrip('/')}/s/cfx/_/;/WEB-INF/web.xml",
+    # f"{url.rstrip('/')}/s/cfx/_/;/WEB-INF/classes/seraph-config.xml",
+    # f"{url.rstrip('/')}/s/cfx/_/;/WEB-INF/decorators.xml",
+    # f"{url.rstrip('/')}/s/cfx/_/;/META-INF/maven/com.atlassian.jira/jira-webapp-dist/pom.properties",
+    # f"{url.rstrip('/')}/s/cfx/_/;/META-INF/maven/com.atlassian.jira/jira-webapp-dist/pom.xml",
+    # f"{url.rstrip('/')}/s/cfx/_/;/META-INF/maven/com.atlassian.jira/atlassian-jira-webapp/pom.xml",
+    #f"{url.rstrip('/')}/s/cfx/_/;/META-INF/maven/com.atlassian.jira/atlassian-jira-webapp/pom.properties",
+    check_result = check_cve_2021_26086(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
     # Check for CVE-2022-0540 Variant 1
     # {url}InsightPluginShowGeneralConfiguration.jspa;
     check_result = check_cve_2022_0540_v1(url)
@@ -243,7 +255,7 @@ def test_jira_vulns(url):
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-
+    # old checks that need to be rewritten
     #cve-2019-8451:ssrf-response-body
     try:
         response = requests.get(cve20198451, timeout=10, verify=False)
@@ -285,15 +297,6 @@ def test_jira_vulns(url):
     except:
         pass
 
-    #CVE-2019-3402
-    try:
-        response = requests.get(cve20193402, timeout=10, verify=False)
-        # if response.status_code == 200 in response.text:
-        if response.status_code == 200:
-            vulnerabilities.append(f"+ CVE-2019-3402 [Possible XSS]：XSS in the labels gadget  | URL : {cve20193402}")
-    except:
-        pass
-
     # CVE-2017-9506
     try:
         response = requests.get(cve20179506, timeout=10, verify=False)
@@ -326,8 +329,12 @@ def test_jira_vulns(url):
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-    # print(vulnerabilities) #debug
 
+    # -----------------------------------------------------------
+    # Process all the vulnerabilities
+    # -----------------------------------------------------------
+    
+    # print(vulnerabilities) #debug
     process_vulnerabilities(vulnerabilities)
 
 

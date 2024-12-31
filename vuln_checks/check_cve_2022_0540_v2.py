@@ -19,6 +19,7 @@ def check_cve_2022_0540_v2(url):
 
     try:
         print(f"\n{Fore.YELLOW}INFO: Checking for CVE-2022-0540 (WBSGantt Variant) {Style.RESET_ALL}")
+        print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {check_cve_2022_0540_v2_url}")
         response = requests.get(check_cve_2022_0540_v2_url, allow_redirects=False, verify=False)
 
         # Check for the vulnerability

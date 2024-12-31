@@ -19,6 +19,7 @@ def check_unauthenticated_issues(url):
 
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Issues with Content{Style.RESET_ALL}")
+        print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {check_unauthenticated_issues_url}")
         response = requests.get(check_unauthenticated_issues_url, allow_redirects=False, verify=False)
 
         # Check for the vulnerability

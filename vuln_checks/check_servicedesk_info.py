@@ -16,6 +16,7 @@ def check_servicedesk_info(url):
     vulnerabilities = ''
 
     try:
+        print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {servicedesk_url}")
         response = requests.get(servicedesk_url, allow_redirects=False, verify=False)
 
         if response.status_code == 200:

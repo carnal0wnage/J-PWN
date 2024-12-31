@@ -17,6 +17,7 @@ def check_unauthenticated_resolutions(url):
 
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Access to JIRA Resolutions{Style.RESET_ALL}")
+        print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {resolution_url}")
         response = requests.get(resolution_url, verify=False)
 
         if response.status_code == 200:

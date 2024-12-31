@@ -20,7 +20,7 @@ def check_unauthenticated_user_search(base_url):
 
         # Check if the response indicates unauthenticated access
         if response.status_code == 200 and any(key in response.text for key in ["name", "key", "emailAddress"]):
-            vulnerability_detail = f"[INFO DISCLOSURE] Unauthenticated Access to User Search: {user_search_url}"
+            vulnerability_detail = f"+ [INFO DISCLOSURE] Unauthenticated Access to User Search: {user_search_url}"
             vulnerabilities += vulnerability_detail
             print(f"{Fore.GREEN}[+] [INFO DISCLOSURE] Unauthenticated Access to User Search: {user_search_url}{Style.RESET_ALL}")
 

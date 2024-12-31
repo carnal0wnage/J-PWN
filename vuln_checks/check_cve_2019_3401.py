@@ -18,6 +18,7 @@ def check_cve_2019_3401(url):
         
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for CVE-2019-3401 Unauthenticated Popular Filters with Shared Content")
+        print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {open_popular_filter_url}")
         response = requests.get(open_popular_filter_url, allow_redirects=False, verify=False)
 
         if response.status_code == 200 and "Shared With" in response.text or "Share with" in response.text or "共享给" in response.text:

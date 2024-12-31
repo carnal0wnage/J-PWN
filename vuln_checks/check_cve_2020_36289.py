@@ -12,6 +12,7 @@ def check_cve_2020_36289(base_url):
 
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for CVE-2020-36289 (Username Enumeration via QueryComponentRendererValue){Style.RESET_ALL}")
+        print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {cve_url}")
         response = requests.get(cve_url, allow_redirects=False, verify=False)
 
         # Check if the response indicates a vulnerability
