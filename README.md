@@ -12,7 +12,11 @@ This vulnerability checks weren't really working correctly and didnt do much in 
 
 ## Install
 
-`pip install -r requirements`
+`python3  -m venv j-pwn`
+
+`source j-pwn/bin/activate`
+
+`pip3 install -r requirements`
 
 `python3 j-pwn.py --single 1.2.3.4 -p /jira/` (jira path added)
 
