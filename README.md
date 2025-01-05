@@ -1,19 +1,34 @@
 # J-PWN
 Jira Vulnerability Enumeration 
+```
+             ██╗      ██████╗ ██╗    ██╗███╗   ██╗
+             ██║      ██╔══██╗██║    ██║████╗  ██║
+             ██║█████╗██████╔╝██║ █╗ ██║██╔██╗ ██║
+        ██   ██║╚════╝██╔═══╝ ██║███╗██║██║╚██╗██║
+        ╚█████╔╝      ██║     ╚███╔███╔╝██║ ╚████║
+         ╚════╝       ╚═╝      ╚══╝╚══╝ ╚═╝  ╚═══╝
+         ** Hack the Planet ** [carnal0wnage]
+```
+
+
+## Wiki
+There is an extensive wiki at [https://github.com/carnal0wnage/J-PWN/wiki](https://github.com/carnal0wnage/J-PWN/wiki)
 
 
 
-## Install
+## Quickstart 
+### Install
+```
+python3  -m venv j-pwn
+source j-pwn/bin/activate
+pip3 install -r requirements
+```
+### Running J-PWN
+`python3 j-pwn.py --single http://5.6.7.8:8080`
 
-`python3  -m venv j-pwn`
+`python3 j-pwn.py --single https://1.2.3.4 -p /jira/` (jira path added)
 
-`source j-pwn/bin/activate`
-
-`pip3 install -r requirements`
-
-`python3 j-pwn.py --single 1.2.3.4 -p /jira/` (jira path added)
-
-`python3 j-pwn.py --single 5.6.7.8`
+`python3 j-pwn.py --list ../jira-hosts.txt`
 
 ### Example Data
 
