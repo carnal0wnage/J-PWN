@@ -53,6 +53,7 @@ def check_unauthenticated_projects(url):
                     print(f"      API URL: {self_url}\n")
         else:
             print(f"{Fore.YELLOW}- No unauthenticated access to JIRA projects detected on: {project_url}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}- HTTP Code: {response.status_code}{Style.RESET_ALL}")
 
     except requests.exceptions.JSONDecodeError:
         print(f"{Fore.RED}- Failed to parse JSON response from: {project_url}{Style.RESET_ALL}")

@@ -51,6 +51,7 @@ def check_unauthenticated_dashboard_access(url):
                 print("    No dashboards found.")
         else:
             print(f"{Fore.YELLOW}\n- No unauthenticated access to JIRA dashboards detected on: {dashboard_url}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}- HTTP Code: {response.status_code}{Style.RESET_ALL}")
     except json.JSONDecodeError:
         print(f"{Fore.RED}- Failed to parse JSON response from: {dashboard_url}{Style.RESET_ALL}")
     except Exception as e:

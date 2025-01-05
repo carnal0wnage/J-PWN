@@ -46,6 +46,7 @@ def check_unauthenticated_project_categories(url):
                 print("    No project categories found.")
         else:
             print(f"{Fore.YELLOW}\n- No unauthenticated access to JIRA project categories detected on: {project_category_url}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}- HTTP Code: {response.status_code}{Style.RESET_ALL}")
     except json.JSONDecodeError:
         print(f"{Fore.RED}- Failed to parse JSON response from: {project_category_url}{Style.RESET_ALL}")
     except Exception as e:

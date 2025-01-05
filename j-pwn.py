@@ -251,7 +251,7 @@ def test_jira_vulns(url):
 
     # Check for CVE-2023-26256
     # {url}/plugins/servlet/snjFooterNavigationConfig?fileName=../../../../etc/passwd&fileMime=$textMime"
-    check_result = check_cve_2023_26255(url)
+    check_result = check_cve_2023_26256(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 

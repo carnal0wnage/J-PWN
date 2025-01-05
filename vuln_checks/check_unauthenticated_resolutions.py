@@ -44,6 +44,7 @@ def check_unauthenticated_resolutions(url):
                 print("    No resolutions found.")
         else:
             print(f"{Fore.YELLOW}\n- No unauthenticated access to JIRA resolutions detected on: {resolution_url}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}- HTTP Code: {response.status_code}{Style.RESET_ALL}")
 
     except requests.exceptions.JSONDecodeError:
         print(f"{Fore.RED}- Failed to parse JSON response from: {resolution_url}{Style.RESET_ALL}")

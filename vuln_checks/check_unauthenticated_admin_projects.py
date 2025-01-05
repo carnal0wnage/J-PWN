@@ -53,6 +53,7 @@ def check_unauthenticated_admin_projects(url):
                 print("    No admin projects found.")
         else:
             print(f"{Fore.YELLOW}\n- No unauthenticated access to JIRA admin projects detected on: {admin_projects_url}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}- HTTP Code: {response.status_code}{Style.RESET_ALL}")
     except json.JSONDecodeError:
         print(f"{Fore.RED}- Failed to parse JSON response from: {admin_projects_url}{Style.RESET_ALL}")
     except Exception as e:
