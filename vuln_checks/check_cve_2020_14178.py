@@ -13,7 +13,7 @@ def check_cve_2020_14178(url):
     '''
     Checks for CVE-2020-14178 Project Enumeration
     '''
-    cve_2020_14178_url = f"{url}browse.NOSUCHPROJECT"
+    cve_2020_14178_url = f"{url.rstrip('/')}/browse.NOSUCHPROJECT"
     vulnerabilities = ''
         
     try:

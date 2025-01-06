@@ -14,7 +14,7 @@ def check_unauthenticated_projectkey_enumeration(url):
     Checks for unauthenticated projectkey enumeration
     You can guess project key names at this endpoint
     '''
-    unauthenticated_projectkey_enumeration_url = f"{url}rest/api/2/user/assignable/multiProjectSearch?projectKeys=admin"
+    unauthenticated_projectkey_enumeration_url = f"{url.rstrip('/')}/rest/api/2/user/assignable/multiProjectSearch?projectKeys=admin"
     vulnerabilities = ''
         
     try:

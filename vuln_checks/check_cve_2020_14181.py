@@ -13,7 +13,7 @@ def check_cve_2020_14181(url):
     '''
     Checks for CVE-2020-14181 Username Enumeration
     '''
-    cve_2020_14181_url = f"{url}secure/ViewUserHover.jspa?username=ishouldntexist"
+    cve_2020_14181_url = f"{url.rstrip('/')}/secure/ViewUserHover.jspa?username=ishouldntexist"
     vulnerabilities = ''
         
     try:

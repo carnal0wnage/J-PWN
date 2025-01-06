@@ -14,7 +14,7 @@ def check_cve_2022_0540_v1(url):
     '''
     Checks for CVE-2022-0540 Variant 1, a potential Remote Code Execution vulnerability in Jira.
     '''
-    check_cve_2022_0540_v1_url = f"{url}InsightPluginShowGeneralConfiguration.jspa;"
+    check_cve_2022_0540_v1_url = f"{url.rstrip('/')}/InsightPluginShowGeneralConfiguration.jspa;"
     vulnerabilities = ''
 
     try:

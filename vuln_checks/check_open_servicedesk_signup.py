@@ -13,7 +13,7 @@ def check_open_servicedesk_signup(url):
     '''
     Checks for open service desk. You should mannually attempt to signup
     '''
-    service_desk_url = f"{url}servicedesk/customer/user/signup"
+    service_desk_url = f"{url.rstrip('/')}/servicedesk/customer/user/signup"
     vulnerabilities = ''
         
     try:

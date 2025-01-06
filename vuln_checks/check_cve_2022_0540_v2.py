@@ -14,7 +14,7 @@ def check_cve_2022_0540_v2(url):
     '''
     Checks for CVE-2022-0540 Variant 2, a potential Remote Code Execution vulnerability in Jira.
     '''
-    check_cve_2022_0540_v2_url = f"{url}secure/WBSGanttManageScheduleJobAction.jspa;"
+    check_cve_2022_0540_v2_url = f"{url.rstrip('/')}/secure/WBSGanttManageScheduleJobAction.jspa;"
     vulnerabilities = ''
 
     try:

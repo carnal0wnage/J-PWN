@@ -14,7 +14,7 @@ def check_cve_2019_11581(url):
     '''
     Checks for CVE-2019-11581, a potential Remote Code Execution vulnerability in Jira.
     '''
-    contact_admin_url = f"{url}secure/ContactAdministrators!default.jspa"
+    contact_admin_url = f"{url.rstrip('/')}/secure/ContactAdministrators!default.jspa"
     vulnerabilities = ''
 
     try:

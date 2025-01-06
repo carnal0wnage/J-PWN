@@ -14,7 +14,7 @@ import urllib3
 # Check for unauthenticated access to JIRA admin projects
 
 def check_unauthenticated_admin_projects(url):
-    admin_projects_url = f"{url}rest/menu/latest/admin?maxResults=1000"
+    admin_projects_url = f"{url.rstrip('/')}/rest/menu/latest/admin?maxResults=1000"
     vulnerabilities = ''  # Local vulnerabilities list
 
     try:

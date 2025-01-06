@@ -13,7 +13,7 @@ def check_unauthenticated_user_enumeration(url):
     '''
     Checks for open service desk. You should mannually attempt to signup
     '''
-    unauthenticated_user_enumeration_url = f"{url}secure/popups/UserPickerBrowser.jspa"
+    unauthenticated_user_enumeration_url = f"{url.rstrip('/')}/secure/popups/UserPickerBrowser.jspa"
     vulnerabilities = ''
         
     try:

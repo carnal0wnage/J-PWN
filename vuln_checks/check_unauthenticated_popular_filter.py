@@ -11,9 +11,9 @@ import urllib3
 
 def check_unauthenticated_popular_filter(url):
     '''
-    Checks for open service desk. You should mannually attempt to signup
+    Checks for unauthenticated popular filter
     '''
-    open_popular_filter_url = f"{url}secure/ManageFilters.jspa?filterView=search&Search=Search&filterView=search&sortColumn=favcount&sortAscending=false"
+    open_popular_filter_url = f"{url.rstrip('/')}/secure/ManageFilters.jspa?filterView=search&Search=Search&filterView=search&sortColumn=favcount&sortAscending=false"
     vulnerabilities = ''
         
     try:

@@ -12,7 +12,7 @@ from urllib.parse import urlparse
 import urllib3
 
 def check_unauthenticated_resolutions(url):
-    resolution_url = f"{url}rest/api/2/resolution"
+    resolution_url = f"{url.rstrip('/')}/rest/api/2/resolution"
     vulnerabilities = ''  # Local vulnerabilities list
 
     try:

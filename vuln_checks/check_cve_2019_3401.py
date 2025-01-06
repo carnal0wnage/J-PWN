@@ -13,7 +13,7 @@ def check_cve_2019_3401(url):
     '''
     Checks for CVE-2019-3401
     '''
-    open_popular_filter_url = f"{url}secure/ManageFilters.jspa?filterView=search&Search=Search&filterView=search&sortColumn=favcount&sortAscending=false"
+    open_popular_filter_url = f"{url.rstrip('/')}/secure/ManageFilters.jspa?filterView=search&Search=Search&filterView=search&sortColumn=favcount&sortAscending=false"
     vulnerabilities = ''
         
     try:

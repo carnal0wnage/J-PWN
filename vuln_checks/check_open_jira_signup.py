@@ -13,7 +13,7 @@ def check_open_jira_signup(url):
     '''
     Checks for open Jira signup. Manually attempt to signup
     '''
-    signup_url = f"{url}secure/Signup!default.jspa"
+    signup_url = f"{url.rstrip('/')}/secure/Signup!default.jspa"
     vulnerabilities  = ''
 
     try:

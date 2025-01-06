@@ -26,6 +26,7 @@ from .check_cve_2019_8449 import check_cve_2019_8449
 from .check_cve_2020_14178 import check_cve_2020_14178
 from .check_cve_2020_14179 import check_cve_2020_14179
 from .check_cve_2020_14181 import check_cve_2020_14181
+from .check_cve_2020_14185 import check_cve_2020_14185
 from .check_cve_2019_11581 import check_cve_2019_11581
 from .check_cve_2022_0540_v1 import check_cve_2022_0540_v1
 from .check_cve_2022_0540_v2 import check_cve_2022_0540_v2
@@ -70,6 +71,7 @@ __all__ = [
     "check_cve_2020_14178",
     "check_cve_2020_14179",
     "check_cve_2020_14181",
+    "check_cve_2020_14185",
     "check_cve_2020_29453",
     "check_cve_2020_36289",
     "check_cve_2021_26086",

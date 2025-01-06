@@ -13,8 +13,8 @@ import urllib3
 
 # Check for CVE-2019-3403
 def check_cve_2019_3403(url):
-    user_picker_url = f"{url}rest/api/2/user/picker?query=admin"
-    user_picker_url_brute = f"{url}rest/api/2/user/picker?query=<usernametoguess>"
+    user_picker_url = f"{url.rstrip('/')}/rest/api/2/user/picker?query=admin"
+    user_picker_url_brute = f"{url.rstrip('/')}/rest/api/2/user/picker?query=<usernametoguess>"
     vulnerabilities = ''
 
     try:

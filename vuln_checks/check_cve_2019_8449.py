@@ -11,8 +11,8 @@ import urllib3
 
 # Check for CVE-2019-8449
 def check_cve_2019_8449(url):
-    cve_2019_8449_url = f"{url}rest/api/latest/groupuserpicker?query=1&maxResults=50000&showAvatar=true"
-    cve_2019_8449_brute = f"{url}rest/api/latest/groupuserpicker?query=<usernametoguess>&maxResults=50000&showAvatar=true"
+    cve_2019_8449_url = f"{url.rstrip('/')}/rest/api/latest/groupuserpicker?query=1&maxResults=50000&showAvatar=true"
+    cve_2019_8449_brute = f"{url.rstrip('/')}/rest/api/latest/groupuserpicker?query=<usernametoguess>&maxResults=50000&showAvatar=true"
 
     vulnerabilities = ''
     
