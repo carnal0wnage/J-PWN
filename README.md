@@ -30,6 +30,8 @@ pip3 install -r requirements
 
 `python3 j-pwn.py --list ../jira-hosts.txt`
 
+`python3 j-pwn.py --single http://1.2.3.4:8080 --module check_open_jira_signup`
+
 ### Example Data
 
 Returns JIRA server version if JIRA is identified
