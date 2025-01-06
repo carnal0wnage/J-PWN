@@ -6,6 +6,12 @@ __pycache__/
 # C extensions
 *.so
 
+# OSX Things
+.DS_Store
+
+# J-PWN Specific
+loot/
+
 # Distribution / packaging
 .Python
 build/
