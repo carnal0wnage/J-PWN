@@ -6,6 +6,10 @@ import urllib3
 import colorama
 from colorama import Fore, Style
 import requests
+import time
+import os
+import sys
+import random
 
 # import each module from vuln_checks/
 from vuln_checks import *
@@ -32,6 +36,23 @@ def banner():
 
 
         """)
+
+def run_single_check(module_name, url):
+    """ Dynamically run a single check module by name """
+    try:
+        module = globals()[module_name]
+        print(f"{Fore.BLUE}[INFO] Running single module: {module_name}{Style.RESET_ALL}")
+        check_result = module(url)
+        if check_result:
+            print(f"{Fore.GREEN}[RESULT] Vulnerability found by {module_name}:{Style.RESET_ALL}")
+            print(check_result)
+        else:
+            print(f"{Fore.YELLOW}[INFO] No vulnerabilities found by {module_name}{Style.RESET_ALL}")
+    except KeyError:
+        print(f"{Fore.RED}[ERROR] Module {module_name} not found.{Style.RESET_ALL}")
+    except Exception as e:
+        print(f"{Fore.RED}[ERROR] An error occurred while running {module_name}: {e}{Style.RESET_ALL}")
+
 
 def test_jira_vulns(url):
     """ Run all the checks """
@@ -439,21 +460,26 @@ def parse_and_check_jira(file_path):
 
 def main():
     """ Hack the planet """
-    banner()
-    parser = argparse.ArgumentParser(description="Check if JIRA is running on a server or list of servers")
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--single", "-s", metavar="URL", help="Check if JIRA is running on a single server")
-    parser.add_argument("--path", "-p", metavar="PATH", default="/", help="Specify the API path to check (default: /")
-    group.add_argument("--list", "-l", metavar="FILE", help="Check if JIRA is running on a list of servers")
-    args = parser.parse_args()
+    try:
+        banner()
+        parser = argparse.ArgumentParser(description="Check if JIRA is running on a server or list of servers")
+        group = parser.add_mutually_exclusive_group(required=True)
+        group.add_argument("--single", "-s", metavar="URL", help="Check if JIRA is running on a single server")
+        parser.add_argument("--path", "-p", metavar="PATH", default="/", help="Specify the API path to check (default: /)")
+        group.add_argument("--list", "-l", metavar="FILE", help="Check if JIRA is running on a list of servers")
+        parser.add_argument("--module", "-m", metavar="MODULE", help="Run a specific module against the target")
+        args = parser.parse_args()
 
-    if args.single:
-        check_jira(args.single, args.path)
-    elif args.list:
-        parse_and_check_jira(args.list)
-
-    else:
-        print("something went wrong")
+        if args.single:
+            if args.module:
+                run_single_check(args.module, args.single)
+            else:
+                check_jira(args.single, args.path)
+        elif args.list:
+            parse_and_check_jira(args.list)
+    except KeyboardInterrupt:
+        print(f"\n{Fore.RED}Detected CTRL+C exiting...{Style.RESET_ALL}")
+        sys.exit(0)
 
 if __name__ == "__main__":
     main()
