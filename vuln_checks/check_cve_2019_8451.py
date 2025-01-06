@@ -7,7 +7,7 @@ def check_cve_2019_8451(base_url, output_folder="loot/"):
     """
     Checks for CVE-2019-8451 (SSRF via OAuth endpoint) and extracts sensitive metadata if applicable.
     """
-    print(f"\n{Fore.YELLOW}INFO: IN DEVELOPMENT Checking for CVE-2019-8451 (SSRF){Style.RESET_ALL}")
+    print(f"\n{Fore.YELLOW}INFO: Checking for CVE-2019-8451 (SSRF){Style.RESET_ALL}")
     
     vulnerabilities = ''  # String to store discovered vulnerabilities
     headers = {
