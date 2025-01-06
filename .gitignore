@@ -11,6 +11,7 @@ __pycache__/
 
 # J-PWN Specific
 loot/
+j-pwn/
 
 # Distribution / packaging
 .Python
