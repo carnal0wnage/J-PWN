@@ -30,13 +30,13 @@ def check_open_jira_signup(url):
                 # print(f"  URL: {contact_admin_url}")
             else:
  
-                vulnerabilities += (f"+ Open Signup Page: Manual exploitation required [try to signup and log in] | URL: {signup_url}")
-                print(f"\n{Fore.GREEN}+ Open Signup Page Found: Manual exploitation required [try to signup and log in]{Style.RESET_ALL}")
+                vulnerabilities += (f"+ [Initial Access] Open Signup Page: Manual exploitation required [try to signup and log in] | URL: {signup_url}")
+                print(f"\n{Fore.GREEN}+ [Initial Access] Open Signup Page Found: Manual exploitation required [try to signup and log in]{Style.RESET_ALL}")
                 print(f"  URL: {signup_url}")
                 print(f"  Note: Exploitation requires manual steps.")
                 #print(response_text)
         elif response.status_code == 403:
-            print(f"{Fore.YELLOW}\n- No Open Signup vulnerability detected on: {signup_url}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}\n- No Open Jira Signup detected on: {signup_url}{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}{Style.RESET_ALL}")
         elif response.status_code == 302:
             location = response.headers.get("Location", "No Location header found") 
@@ -44,7 +44,7 @@ def check_open_jira_signup(url):
             print(f"{Fore.YELLOW}- Location Header: {location}")
             print(f"{Fore.YELLOW}- This program doesnt follow 302 - Try: curl -k -v \'{signup_url}\'{Style.RESET_ALL}")
         else:
-            print(f"{Fore.YELLOW}\n- No Open Signup vulnerability detected on: {signup_url}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}\n- No Open Jira Signup detected on: {signup_url}{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}{Style.RESET_ALL}")
 
     except Exception as e:

@@ -14,6 +14,9 @@ from .check_unauthenticated_installed_gadgets import check_unauthenticated_insta
 from .check_unauthenticated_issues import check_unauthenticated_issues
 from .check_unauthenticated_screens import check_unauthenticated_screens
 from .check_unauthenticated_user_search import check_unauthenticated_user_search
+from .check_unauthenticated_greenhopper_user_config import check_unauthenticated_greenhopper_user_config
+from .check_unauthenticated_issue_link_type import check_unauthenticated_issue_link_type
+from .check_unauthenticated_priority_access import check_unauthenticated_priority_access
 from .check_cve_2017_9506 import check_cve_2017_9506
 from .check_cve_2018_20824 import check_cve_2018_20824
 from .check_cve_2019_3401 import check_cve_2019_3401
@@ -27,6 +30,7 @@ from .check_cve_2019_11581 import check_cve_2019_11581
 from .check_cve_2022_0540_v1 import check_cve_2022_0540_v1
 from .check_cve_2022_0540_v2 import check_cve_2022_0540_v2
 from .check_cve_2019_8442 import check_cve_2019_8442
+from .check_cve_2019_8451 import check_cve_2019_8451
 from .check_cve_2020_29453 import check_cve_2020_29453
 from .check_cve_2020_36289 import check_cve_2020_36289
 from .check_cve_2021_26086 import check_cve_2021_26086
@@ -51,6 +55,9 @@ __all__ = [
     "check_unauthenticated_issues",
     "check_unauthenticated_screens",
     "check_unauthenticated_user_search",
+    "check_unauthenticated_greenhopper_user_config",
+    "check_unauthenticated_issue_link_type",
+    "check_unauthenticated_priority_access",
     "check_cve_2017_9506",
     "check_cve_2018_20824",
     "check_cve_2019_3401",
@@ -58,6 +65,7 @@ __all__ = [
     "check_cve_2019_3403",
     "check_cve_2019_8442",
     "check_cve_2019_8449",
+    "check_cve_2019_8451",
     "check_cve_2019_11581",
     "check_cve_2020_14178",
     "check_cve_2020_14179",

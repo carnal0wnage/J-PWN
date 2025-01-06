@@ -33,7 +33,7 @@ def check_open_servicedesk_login(url):
             print(f"  Note: Exploitation requires manual steps.")
             print(f"  Note: Refer to: https://medium.com/@intideceukelaire/hundreds-of-internal-servicedesks-exposed-due-to-covid-19-ecd0baec87bd")
         elif response.status_code == 403:
-            print(f"{Fore.YELLOW}\n- No Open Service Desk vulnerability detected on: {service_desk_url}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}\n- No Open Service Desk Login detected on: {service_desk_url}{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}{Style.RESET_ALL}")
         elif response.status_code == 302:
             location = response.headers.get("Location", "No Location header found") 
@@ -41,7 +41,7 @@ def check_open_servicedesk_login(url):
             print(f"{Fore.YELLOW}- Location Header: {location}")
             print(f"{Fore.YELLOW}- This program doesnt follow 302 - Try: curl -k -v \'{service_desk_url}\'{Style.RESET_ALL}")
         else:
-            print(f"{Fore.YELLOW}\n- No Open Service Desk vulnerability detected on: {service_desk_url}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}\n- No Open Service Desk Login detected on: {service_desk_url}{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}{Style.RESET_ALL}")
 
     except Exception as e:

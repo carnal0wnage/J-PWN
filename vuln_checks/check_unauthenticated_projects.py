@@ -28,7 +28,7 @@ def check_unauthenticated_projects(url):
             data = response.json()
 
             if isinstance(data, list) and not data:  # Check for an empty list
-                print(f"{Fore.YELLOW}- No projects found (Empty Results).{Style.RESET_ALL}")
+                print(f"{Fore.YELLOW}- No Projects found (Empty Results).{Style.RESET_ALL}")
                 pass
                 # return "empty results"
             elif isinstance(data, list) and data:

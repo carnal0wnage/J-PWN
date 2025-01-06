@@ -1,19 +1,9 @@
-import argparse
 import requests
-from urllib.parse import urlparse
-import colorama
 from colorama import Fore, Style
-import time
-import os
-import sys
-import random
-import json
-from urllib.parse import urlparse
-import urllib3
 
 # Check for unauthenticated access to JIRA project categories
 def check_unauthenticated_project_categories(url):
-    project_category_url = f"{url}rest/api/2/projectCategory?maxResults=1000"
+    project_category_url = f"{url.rstrip('/')}/rest/api/2/projectCategory?maxResults=1000"
     vulnerabilities = ''  # Local vulnerabilities list
 
     try:
@@ -23,14 +13,19 @@ def check_unauthenticated_project_categories(url):
 
         # Check for unauthenticated access and parse the response
         if response.status_code == 200:
-            vulnerabilities += (f"+ [Info Disclosure] Unauthenticated access to JIRA project categories | URL : {project_category_url}")
-
             data = response.json()
 
-            print(f"\n{Fore.GREEN}+ Unauthenticated Access to JIRA Project Categories Detected\n++ Manually check these for Unauthenticated Access ++{Style.RESET_ALL}")
+            # Check if the returned data is an empty list
+            if not data:
+                print(f"{Fore.YELLOW}- No Project Categories found (Empty Results).{Style.RESET_ALL}")
+                return vulnerabilities
+
+            vulnerabilities += f"+ [Info Disclosure] Unauthenticated access to JIRA project categories | URL : {project_category_url}"
+
+            print(f"\n{Fore.GREEN}+ Unauthenticated Access to JIRA Project Categories Detected{Style.RESET_ALL}")
             print(f"  URL: {project_category_url}")
             print("\n  Project Categories Details:")
-            
+
             if data:
                 for category in data:
                     category_self = category.get("self", "N/A")
@@ -51,4 +46,5 @@ def check_unauthenticated_project_categories(url):
         print(f"{Fore.RED}- Failed to parse JSON response from: {project_category_url}{Style.RESET_ALL}")
     except Exception as e:
         print(f"{Fore.RED}- An error occurred while checking {project_category_url}: {e}{Style.RESET_ALL}")
-    return vulnerabilities
+    
+    return vulnerabilities  # Return the discovered vulnerabilities

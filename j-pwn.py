@@ -62,9 +62,9 @@ def test_jira_vulns(url):
 
     #todo secure/SetupMode!default.jspa https://github.com/projectdiscovery/nuclei-templates/blob/54d78a0552a78cccafa3435bbdd42dff4b568c27/http/misconfiguration/installer/jira-setup.yaml
     # (CVE-2020-36289) /secure/QueryComponentRendererValue!Default.jspa?assignee=user:admin
-    #todo /rest/greenhopper/1.0/userData/userConfig
+    #todo secure/SetupMode!default.jspa check that jira is in setup mode
     #todo /rest/api/2/mypermissions  Returns all permissions in the system and whether the currently logged in user has them. need to query for "havePermission": true,
-
+    # todo /rest/api/2/project https://docs.atlassian.com/software/jira/docs/api/REST/7.6.1/#api/2/project-getAllProjects
 
 
     # Check for unauthenticated access to JIRA dashboards
@@ -140,6 +140,26 @@ def test_jira_vulns(url):
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
+    # check for unauthenticated greenhopper userconfig
+    # {url}/rest/greenhopper/1.0/userData/userConfig
+    check_result = check_unauthenticated_greenhopper_user_config(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+
+    # Checks for unauthenticated access to the Issue Link Type API
+    # {url}/rest/api/2/issueLinkType
+    check_result = check_unauthenticated_issue_link_type(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    
+    # Checks for unauthenticated access to the Priority API
+    # {url]/rest/api/2/priority
+    check_result = check_unauthenticated_priority_access(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
     # -----------------------------------------------------------
     # let's do CVE checks yo
     # -----------------------------------------------------------
@@ -162,11 +182,11 @@ def test_jira_vulns(url):
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-    # Check for CVE-2019-3402
+    # Check for CVE-2019-3402 DISABLED DUE TO ALWAYS RETURNING POSITIVE
     # {url}secure/ConfigurePortalPages!default.jspa?view=search&searchOwnerUserName=x2rnu%3Cscript%3Ealert(\"XSS_TEST\")%3C%2fscript%3Et1nmk&Search=Search
-    check_result = check_cve_2019_3402(url)
-    if check_result:  # Only append if check_result is not empty
-        vulnerabilities.append(check_result)
+    #check_result = check_cve_2019_3402(url)
+    #if check_result:  # Only append if check_result is not empty
+    #    vulnerabilities.append(check_result)
 
     # Check for CVE-2019-3403
     # {url}rest/api/2/user/picker?query=admin
@@ -183,6 +203,12 @@ def test_jira_vulns(url):
     # Check for CVE-2019-8449
     # {url}rest/api/latest/groupuserpicker?query=1&maxResults=50000&showAvatar=true
     check_result = check_cve_2019_8449(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    # Check for CVE-2019-8451
+    # {url}/plugins/servlet/gadgets/makeRequest?url=
+    check_result = check_cve_2019_8451(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
@@ -254,59 +280,6 @@ def test_jira_vulns(url):
     check_result = check_cve_2023_26256(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
-
-    # old checks that need to be rewritten
-    #cve-2019-8451:ssrf-response-body
-    try:
-        response = requests.get(cve20198451, timeout=10, verify=False)
-        # if response.status_code == 200 in response.text:
-        if response.status_code == 200:
-            vulnerabilities.append(f"+ CVE-2019-8451 [SSRF] : The /plugins/servlet/gadgets/makeRequest resource in Jira before version 8.4.0 allows remote attackers to access the content of internal network resources via a Server Side Request Forgery (SSRF) vulnerability due to a logic bug in the JiraWhitelist class. | URL : {cve20198451}")
-    except:
-        pass
-
-
-
-    #CVE-2018-5230 = /issues/
-    try:
-        response = requests.get(cve20185230, timeout=10, verify=False)
-        # if response.status_code == 200 in response.text:
-        if response.status_code == 200:
-            vulnerabilities.append(f"+ CVE-2018-5230 [Potential XSS] : https://hackerone.com/reports/380354 | URL : {cve20185230}")
-    except:
-        pass
-
-
-    # XSS
-    try:
-        response = requests.get(xss, timeout=10, verify=False)
-        # if response.status_code == 200 in response.text:
-        if response.status_code == 200:
-            vulnerabilities.append(f"+ Possible XSS | URL : {xss}")
-    except:
-        pass
-
-
-
-    #CVE-2017-9506
-    try:
-        response = requests.get(cve20179506, timeout=10, verify=False)
-        # if response.status_code == 200 in response.text:
-        if response.status_code == 200:
-            vulnerabilities.append(f"+ CVE-2017-9506 : https://blog.csdn.net/caiqiiqi/article/details/89017806 | URL : {cve20179506}")
-    except:
-        pass
-
-    # CVE-2017-9506
-    try:
-        response = requests.get(cve20179506, timeout=10, verify=False)
-        # if response.status_code == 200 in response.text:
-        if response.status_code == 200:
-            vulnerabilities.append(f"+ SSRF vulnerability in confluence Ref: https://medium.com/bugbountywriteup/piercing-the-veil-server-side-request-forgery-to-niprnet-access-c358fd5e249a | URL : {cve20179506}")
-    except:
-        pass
-
-
 
 
 

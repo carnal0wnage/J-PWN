@@ -30,7 +30,7 @@ def check_unauthenticated_issues(url):
             issues = response_json.get("issues", [])
 
             if total_issues == 0:
-                print(f"{Fore.YELLOW}- No unauthenticated issues detected at: {check_unauthenticated_issues_url}{Style.RESET_ALL}")
+                print(f"{Fore.YELLOW}- No unauthenticated issues detected [HTTP 200 but 0 results] at: {check_unauthenticated_issues_url}{Style.RESET_ALL}")
             else:
                 vulnerabilities += f"+ [Info Disclosure] - Unauthenticated Issues Detected | URL: {check_unauthenticated_issues_url}"
                 print(f"{Fore.GREEN}+ [Info Disclosure] - Unauthenticated Issues Detected{Style.RESET_ALL}")

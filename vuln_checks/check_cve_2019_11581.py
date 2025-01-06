@@ -28,7 +28,7 @@ def check_cve_2019_11581(url):
             # print(response_text) DEBUG
 
             if ("administrator has not yet configured" in response_text or 
-                "no ha configurado" in response_text or "noch nicht konfiguriert" in response_text or "не настроил эту контактную форму" in response_text or "管理员尚未配置此联系表" in response_text or "你还没有为联系表单配置" in response_text):
+                "no ha configurado" in response_text or "noch nicht konfiguriert" in response_text or "не настроил эту контактную форму" in response_text or "管理员尚未配置此联系表" in response_text or "你还没有为联系表单配置" in response_text or "관리자는 아직 이러한 문의 양식을 구성하지 않았습니다" in response_text):
                 print(f"{Fore.YELLOW}\n- No CVE-2019-11581 vulnerability detected on: {contact_admin_url}") 
                 print(f"{Fore.YELLOW}\t **The contact form is not configured and most likely NOT vulnerable.**{Style.RESET_ALL}")
                 # print(f"  URL: {contact_admin_url}")
