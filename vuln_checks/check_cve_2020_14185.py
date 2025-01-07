@@ -49,7 +49,7 @@ def check_cve_actions_operations_enumeration_threaded(base_url, start_id=10000, 
     """
     Uses threading to brute-force enumeration of issue keys from start_id to end_id.
     """
-    print(f"\n{Fore.YELLOW}INFO: Brute-forcing Enumeration via ActionsAndOperations Resource with threading{Style.RESET_ALL}")
+    print(f"\n{Fore.YELLOW}INFO: IssueID Enumeration via ActionsAndOperations Resource with threading{Style.RESET_ALL}")
     vulnerabilities = []  # List to store discovered vulnerabilities
     threads = []
 

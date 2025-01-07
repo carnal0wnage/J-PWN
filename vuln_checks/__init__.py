@@ -17,6 +17,8 @@ from .check_unauthenticated_user_search import check_unauthenticated_user_search
 from .check_unauthenticated_greenhopper_user_config import check_unauthenticated_greenhopper_user_config
 from .check_unauthenticated_issue_link_type import check_unauthenticated_issue_link_type
 from .check_unauthenticated_priority_access import check_unauthenticated_priority_access
+# from .check_public_attachment import check_public_attachment #deving
+from .check_download_public_issue_attachment import check_download_public_issue_attachment
 from .check_cve_2017_9506 import check_cve_2017_9506
 from .check_cve_2018_20824 import check_cve_2018_20824
 from .check_cve_2019_3401 import check_cve_2019_3401
@@ -59,6 +61,8 @@ __all__ = [
     "check_unauthenticated_greenhopper_user_config",
     "check_unauthenticated_issue_link_type",
     "check_unauthenticated_priority_access",
+    # "check_public_attachment",
+    "check_download_public_issue_attachment",
     "check_cve_2017_9506",
     "check_cve_2018_20824",
     "check_cve_2019_3401",

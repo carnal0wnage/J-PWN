@@ -32,8 +32,8 @@ def check_unauthenticated_issues(url):
             if total_issues == 0:
                 print(f"{Fore.YELLOW}- No unauthenticated issues detected [HTTP 200 but 0 results] at: {check_unauthenticated_issues_url}{Style.RESET_ALL}")
             else:
-                vulnerabilities += f"+ [Info Disclosure] - Unauthenticated Issues Detected | URL: {check_unauthenticated_issues_url}"
-                print(f"{Fore.GREEN}+ [Info Disclosure] - Unauthenticated Issues Detected{Style.RESET_ALL}")
+                vulnerabilities += f"+ [Info Disclosure] Unauthenticated Issues Detected | URL: {check_unauthenticated_issues_url}"
+                print(f"{Fore.GREEN}+ [Info Disclosure] Unauthenticated Issues Detected{Style.RESET_ALL}")
                 print(f"  URL: {check_unauthenticated_issues_url}")
                 print(f"  Total Issues: {total_issues} - Printing first 2 for validation\n")
 

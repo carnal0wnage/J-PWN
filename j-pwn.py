@@ -470,6 +470,10 @@ def main():
                     start_id = args.start_id if args.start_id else 10000
                     end_id = args.end_id if args.end_id else 20000
                     check_cve_2020_14185(args.single, start_id, end_id)
+                elif args.module == "check_download_public_issue_attachment":
+                    start_id = args.start_id if args.start_id else 10000
+                    end_id = args.end_id if args.end_id else 20000
+                    check_download_public_issue_attachment(args.single, start_id, end_id)
                 else:
                     run_single_check(args.module, args.single)
             else:
