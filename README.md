@@ -32,9 +32,9 @@ pip3 install -r requirements
 
 `python3 j-pwn.py --list ../jira-hosts.txt` (list of hosts | all checks)
 
-`python3 j-pwn.py --single http://1.2.3.4:8080 --module check_open_jira_signup` (single module | single host)
+`python3 j-pwn.py --single http://1.2.3.4:8080 --module check_open_jira_signup` (single host | single module)
 
-`python3 j-pwn.py --list ../jira_hosts.txt --module check_open_jira_signup` (single module | list of hosts)
+`python3 j-pwn.py --list ../jira_hosts.txt --module check_open_jira_signup` (list of hosts | single module)
 
 ### Why
 - more CVE checks
