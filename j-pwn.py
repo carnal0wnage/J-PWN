@@ -137,6 +137,13 @@ def test_jira_vulns(url):
     #todo secure/SetupMode!default.jspa check that jira is in setup mode
     #todo /rest/api/2/mypermissions  Returns all permissions in the system and whether the currently logged in user has them. need to query for "havePermission": true,
 
+
+    # Check for any permissions as anonymous user
+    # {url}/rest/api/2/mypermissions
+    check_result = check_anonymous_permissions(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
     # Check for unauthenticated access to JIRA dashboards
     # {url}rest/api/2/dashboard?maxResults=100
     check_result = check_unauthenticated_dashboard_access(url)
