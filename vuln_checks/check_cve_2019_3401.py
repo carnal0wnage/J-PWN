@@ -34,10 +34,19 @@ def check_cve_2019_3401(url):
             print(f"{Fore.YELLOW}\n- Unauthenticated Popular Filter vulnerability detected on: {open_popular_filter_url}{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}{Style.RESET_ALL}")
         elif response.status_code == 302:
-            location = response.headers.get("Location", "No Location header found") 
-            print(f"{Fore.YELLOW}- Redirection Detected (302) for: {open_popular_filter_url}{Style.RESET_ALL}")
-            print(f"{Fore.YELLOW}- Location Header: {location}")
-            print(f"{Fore.YELLOW}- This program doesnt follow 302 - Try: curl -k -v \'{open_popular_filter_url}\'{Style.RESET_ALL}")
+            location = response.headers.get("Location", "No Location header found")
+            if "login.jsp" not in location:
+                print(f"{Fore.BLUE}- Following Redirect: {location}{Style.RESET_ALL}")
+                redirected_response = requests.get(location, headers=headers, verify=False)
+                if redirected_response.status_code == 200 and any(keyword in redirected_response.text for keyword in ["Shared With", "Share with", "共享给", "Viewers"]):
+                    vulnerabilities += f"+ [Info Disclosure] CVE-2019-3401 Found via Redirect | URL: {location}"
+                    print(f"\n{Fore.GREEN}+ CVE-2019-3401 Unauthenticated Popular Filter with Shared Content [Manually Inspect] (via Redirect){Style.RESET_ALL}")
+                    print(f"  URL: {location}")
+                else:
+                    print(f"\n{Fore.YELLOW}[-] Not Vulnerable to CVE-2019-3401 after Redirect | No Shared Popular Filters found{Style.RESET_ALL}")
+            else:
+                print(f"{Fore.YELLOW}- Detected redirect to login page - Not VULN{Style.RESET_ALL}")
+                print(f"{Fore.YELLOW}- Location Header: {location}{Style.RESET_ALL}")
         else:
             print(f"{Fore.YELLOW}\n- No CVE-2019-3401  vulnerability detected on: {open_popular_filter_url}{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}{Style.RESET_ALL}")
