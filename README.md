@@ -24,13 +24,25 @@ source j-pwn/bin/activate
 pip3 install -r requirements
 ```
 ### Running J-PWN
-`python3 j-pwn.py --single http://5.6.7.8:8080`
+`python3 j-pwn.py --single http://5.6.7.8:8080` (single host | all checks)
 
-`python3 j-pwn.py --single https://1.2.3.4 -p /jira/` (jira path added)
+`python3 j-pwn.py --single https://1.2.3.4 -p /jira/` (single host | jira path added | all checks)
 
-`python3 j-pwn.py --list ../jira-hosts.txt`
+`python3 j-pwn.py --list ../jira-hosts.txt` (list of hosts | all checks)
 
-`python3 j-pwn.py --single http://1.2.3.4:8080 --module check_open_jira_signup` (run a single module against a host)
+`python3 j-pwn.py --single http://1.2.3.4:8080 --module check_open_jira_signup` (single module | single host)
+
+`python3 j-pwn.py --list ../jira_hosts.txt --module check_open_jira_signup` (single module | list of hosts)
+
+### Why
+- more CVE checks
+- HTTP 200 doesn't always mean vuln - do some checks
+- HTTP 200 with Empty restults != vuln or interesting
+- handle ssl errors
+- handle jira at different paths `/, /jira/, /whatever/`
+- brute force modules for projects and issues (and probably others)
+- for fun 
+
 
 ### Example Data
 
