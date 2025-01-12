@@ -24,12 +24,12 @@ def check_cve_2019_3401(url):
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {open_popular_filter_url}")
         response = requests.get(open_popular_filter_url, headers=headers, allow_redirects=False, verify=False)
 
-        if response.status_code == 200 and "Shared With" in response.text or "Share with" in response.text or "共享给" in response.text:
+        if response.status_code == 200 and "Shared With" in response.text or "Share with" in response.text or "共享给" in response.text or "Freigegeben für" in response.text:
             vulnerabilities += (f"+ [Info Disclosure] CVE-2019-3401 Found | URL: {open_popular_filter_url}")
             print(f"\n{Fore.GREEN}+ CVE-2019-3401 Unauthenticated Popular Filter with Shared Content [Manually Inspect] {Style.RESET_ALL}")
             print(f"  URL: {open_popular_filter_url}")
         elif response.status_code == 200 :
-            print(f"\n{Fore.YELLOW}[-] Not Vulnerable to CVE-2019-3401 | No Shared Popular Filters found {Style.RESET_ALL}")
+            print(f"\n{Fore.YELLOW}- Not Vulnerable to CVE-2019-3401 | No Shared Popular Filters found {Style.RESET_ALL}")
         elif response.status_code == 403:
             print(f"{Fore.YELLOW}\n- Unauthenticated Popular Filter vulnerability detected on: {open_popular_filter_url}{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}{Style.RESET_ALL}")

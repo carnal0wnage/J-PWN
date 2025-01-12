@@ -20,7 +20,7 @@ def check_unauthenticated_popular_dashboard(url):
     }
         
     try:
-        print(f"{Fore.YELLOW}\nINFO: IN DEVELOPMENT - Unauthenticated Popular Dashboard")
+        print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Popular Dashboard")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {check_unauthenticated_popular_dashboard_url}")
         response = requests.get(check_unauthenticated_popular_dashboard_url, headers=headers, allow_redirects=False, verify=False)
 

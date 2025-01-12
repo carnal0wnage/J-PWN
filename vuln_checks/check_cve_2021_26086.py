@@ -35,7 +35,13 @@ def check_cve_2021_26086(url):
             contains_sensitive_data = False  # Flag to check for sensitive data
             
             for chunk in response.iter_lines(decode_unicode=True):
-                if response.status_code == 200 and any(keyword in chunk for keyword in ["dependency", "web-app", "filter", "filter-mapping"]):
+                if response.status_code == 200 and "System Dashboard" in chunk:
+                    print(f"{Fore.YELLOW}- HTTP 200 but found System Dashboad {target_url}'{Style.RESET_ALL}")
+                    contains_sensitive_data = False
+                    contains_system_dashboard = True
+                    break
+
+                elif response.status_code == 200 and any(keyword in chunk for keyword in ["dependency", "web-app", "filter-mapping"]):
                     contains_sensitive_data = True
                     break  # Stop further processing if sensitive data is found
                 
@@ -47,16 +53,18 @@ def check_cve_2021_26086(url):
                         f"Visit the affected URL; the server leaks sensitive information. | URL: {target_url}"
                     )
                     vulnerabilities.append(vulnerability_detail)
+                elif contains_system_dashboard:
+                    pass
                 else:
                     print(f"{Fore.BLUE}- NEEDS MANUAL REVIEW - No sensitive information detected at {target_url}{Style.RESET_ALL}")
             
             elif response.status_code == 302:
                 location = response.headers.get("Location", "No Location header found") 
                 print(f"{Fore.YELLOW}- Redirection Detected (302) for: {target_url}{Style.RESET_ALL}")
-                print(f"{Fore.YELLOW}- Location Header: {location}")
                 if "login.jsp?os_destination=" in location:
                     print(f"{Fore.YELLOW}- Detected redirect to login.jsp - Not VULN{Style.RESET_ALL}")
                 else:
+                    print(f"{Fore.YELLOW}- Location Header: {location}")
                     print(f"{Fore.YELLOW}- This program doesn't follow 302 - Try: curl -k -v '{target_url}'{Style.RESET_ALL}")
             else:
                 print(f"{Fore.BLUE}- No vulnerability detected at {target_url}{Style.RESET_ALL}")
