@@ -84,11 +84,12 @@ def check_cve_actions_operations_enumeration_threaded(base_url, start_id=10000, 
 
     return vulnerabilities  # Return the discovered vulnerabilities
 
-def check_download_public_issue_attachment(base_url, start_id=10000, end_id=20000, num_threads=10):
+def check_download_public_issue_attachment(base_url, path, start_id=10000, end_id=20000, num_threads=10):
     """
     Entry point for the enumeration check within the j-pwn.py main program.
     """
-    vulnerabilities = check_cve_actions_operations_enumeration_threaded(base_url, start_id, end_id, num_threads)
+    full_url = base_url + path
+    vulnerabilities = check_cve_actions_operations_enumeration_threaded(full_url, start_id, end_id, num_threads)
 
     # Print all found vulnerabilities at the end
     if vulnerabilities:

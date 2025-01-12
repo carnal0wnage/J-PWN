@@ -41,6 +41,7 @@ def check_cve_2019_11581(url):
                 print(f"  1. An SMTP server has been configured in Jira and the Contact Administrators Form is enabled")
                 print(f"  2. or an SMTP server has been configured in Jira and an attacker has \"JIRA Administrators\" access.")
                 print(f"  Note:Refer to: https://jira.atlassian.com/browse/JRASERVER-69532 && https://hackerone.com/reports/706841")
+                #print(response_text)
         elif response.status_code == 403:
             print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}")
 

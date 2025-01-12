@@ -37,21 +37,88 @@ def banner():
 
         """)
 
-def run_single_check(module_name, url):
+def run_single_check(module_name, url, path="/"):
     """ Dynamically run a single check module by name """
+
     try:
-        module = globals()[module_name]
-        print(f"{Fore.BLUE}[INFO] Running single module: {module_name}{Style.RESET_ALL}")
-        check_result = module(url)
-        if check_result:
-            print(f"{Fore.GREEN}[RESULT] Vulnerability found by {module_name}:{Style.RESET_ALL}")
-            print(check_result)
+        # Prepare the full URL
+        full_url = url + path
+        print(f"Checking: {full_url}")
+        response = requests.get(full_url + 'rest/api/2/serverInfo', timeout=10, verify=False)
+
+        # Check if the initial response is successful
+        if response.status_code == 200 and "serverTitle" in response.json():
+            print(f"{Fore.GREEN}+ JIRA is running on:", url, f"{Style.RESET_ALL}")
+            data = response.json()
+
+            base_url = data.get("baseUrl", "N/A")
+            version = data.get("version", "N/A")
+            deployment_type = data.get("deploymentType", "N/A")
+            build_number = data.get("buildNumber", "N/A")
+            build_date = data.get("buildDate", "N/A")
+            server_title = data.get("serverTitle", "N/A")
+
+            print("\nJIRA Server Information:")
+            print(f"  Base URL        : {base_url}")
+            print(f"  Version         : {version}")
+            print(f"  Deployment Type : {deployment_type}")
+            print(f"  Build Number    : {build_number}")
+            print(f"  Build Date      : {build_date}")
+            print(f"  Server Title    : {server_title}")
+
+            print(f"{Fore.YELLOW}\n- Running Vuln Checks{Style.RESET_ALL}")
+            # Run the module check
+            module = globals()[module_name]
+            print(f"{Fore.BLUE}[INFO] Running single module: {module_name}{Style.RESET_ALL}")
+            check_result = module(full_url)
         else:
-            print(f"{Fore.YELLOW}[INFO] No vulnerabilities found by {module_name}{Style.RESET_ALL}")
+            print(f"{Fore.RED}- Initial request failed: HTTP {response.status_code}{Style.RESET_ALL}")
+            # Retry with /jira/ if the original path was blank or "/"
+            if path.strip() in ["", "/"]:
+                print(f"{Fore.YELLOW}- Retrying with path: /jira/{Style.RESET_ALL}")
+                retry_url = url + "/jira/"
+                response = requests.get(retry_url + 'rest/api/2/serverInfo', timeout=10, verify=False)
+
+                if response.status_code == 200 and "serverTitle" in response.json():
+                    print(f"{Fore.GREEN}+ JIRA is running on (retry):", retry_url, f"{Style.RESET_ALL}")
+                    data = response.json()
+
+                    base_url = data.get("baseUrl", "N/A")
+                    version = data.get("version", "N/A")
+                    deployment_type = data.get("deploymentType", "N/A")
+                    build_number = data.get("buildNumber", "N/A")
+                    build_date = data.get("buildDate", "N/A")
+                    server_title = data.get("serverTitle", "N/A")
+
+                    print("\nJIRA Server Information (retry):")
+                    print(f"  Base URL        : {base_url}")
+                    print(f"  Version         : {version}")
+                    print(f"  Deployment Type : {deployment_type}")
+                    print(f"  Build Number    : {build_number}")
+                    print(f"  Build Date      : {build_date}")
+                    print(f"  Server Title    : {server_title}")
+
+                    print(f"{Fore.YELLOW}\n- Running Vuln Checks (retry){Style.RESET_ALL}")
+                    # Run all the checks
+                    module = globals()[module_name]
+                    print(f"{Fore.BLUE}[INFO] Running single module: {module_name}{Style.RESET_ALL}")
+                    check_result = module(full_url)
+                    if check_result:
+                        print(f"{Fore.GREEN}[RESULT] Vulnerability found by {module_name}:{Style.RESET_ALL}")
+                        print(check_result)
+                    else:
+                        print(f"{Fore.YELLOW}[INFO] No vulnerabilities found by {module_name}{Style.RESET_ALL}")
+                else:
+                    print(f"{Fore.RED}- Retry failed: HTTP {response.status_code}{Style.RESET_ALL}")
+                    print(f"- JIRA is not running on: {full_url}")
+            else:
+                print(f"{Fore.RED}- JIRA is not running on: {full_url}{Style.RESET_ALL}")
+    except Exception as e:
+        print(f"{Fore.RED}- An error occurred while checking {full_url}: {e}{Style.RESET_ALL}")
     except KeyError:
         print(f"{Fore.RED}[ERROR] Module {module_name} not found.{Style.RESET_ALL}")
-    except Exception as e:
-        print(f"{Fore.RED}[ERROR] An error occurred while running {module_name}: {e}{Style.RESET_ALL}")
+    #except Exception as e:
+    #    print(f"{Fore.RED}[ERROR] An error occurred while running {module_name}: {e}{Style.RESET_ALL}")
 
 
 def test_jira_vulns(url):
@@ -59,24 +126,16 @@ def test_jira_vulns(url):
 
     vulnerabilities= []
 
-    cve20185230 = f"{url}issues/" #https://hackerone.com/reports/380354 https://jira.atlassian.com/browse/JRASERVER-67289 /issues/?jql=assignee%20in%20(membersOf(jira-users))
+    cve20185230 = f"{url}issues/" #https://hackerone.com/reports/380354 https://jira.atlassian.com/browse/JRASERVER-67289 /issues/?jql=assignee%20in%20(membersOf(jira-users)) /issues/?jql=assignee%20in%20(membersOf("jira-software-users"))
 
     xss = f"{url}pages/%3CIFRAME%20SRC%3D%22javascript%3Aalert(‘XSS’)%22%3E.vm"
 
     cve20193402 = f"{url}secure/ConfigurePortalPages!default.jspa?view=search&searchOwnerUserName=x2rnu%3Cscript%3Ealert(1)%3C%2fscript%3Et1nmk&Search=Search"
 
-
-    #todo /rest/api/2/user/search?username=.&maxResults=1000
-    #     /rest/api/2/user/search?username=.&includeInactive=true
-    #     /rest/api/latest/user/search?query=+&maxResults=1000
-    #todo /rest/project-templates/1.0/createshared https://jira.atlassian.com/browse/JRASERVER-70926
-
     #todo secure/SetupMode!default.jspa https://github.com/projectdiscovery/nuclei-templates/blob/54d78a0552a78cccafa3435bbdd42dff4b568c27/http/misconfiguration/installer/jira-setup.yaml
     # (CVE-2020-36289) /secure/QueryComponentRendererValue!Default.jspa?assignee=user:admin
     #todo secure/SetupMode!default.jspa check that jira is in setup mode
     #todo /rest/api/2/mypermissions  Returns all permissions in the system and whether the currently logged in user has them. need to query for "havePermission": true,
-    # todo /rest/api/2/project https://docs.atlassian.com/software/jira/docs/api/REST/7.6.1/#api/2/project-getAllProjects
-
 
     # Check for unauthenticated access to JIRA dashboards
     # {url}rest/api/2/dashboard?maxResults=100
@@ -95,22 +154,16 @@ def test_jira_vulns(url):
     check_result = check_unauthenticated_projects(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
-
-    # Check for unauthenticated access to JIRA resolutions
-    # {url}rest/api/2/resolution
-    check_result = check_unauthenticated_resolutions(url)
-    if check_result:  # Only append if check_result is not empty
-        vulnerabilities.append(check_result)
-
+   
     # Check for unauthenticated access to JIRA admin projects
     # {url}rest/menu/latest/admin?maxResults=1000
     check_result = check_unauthenticated_admin_projects(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-    # Checks for open Jira signup. Manually attempt to signup
-    # {url}secure/Signup!default.jspa
-    check_result = check_open_jira_signup(url)
+    # Check for unauthenticated access to JIRA resolutions
+    # {url}rest/api/2/resolution
+    check_result = check_unauthenticated_resolutions(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
@@ -126,22 +179,27 @@ def test_jira_vulns(url):
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
+    # Checks for unauthenticated access to the User Search API via 
+    # {url}/rest/api/2/user/search?username=.&maxResults=1000
+    check_result = check_unauthenticated_user_search(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
     # Check for Unauthenticated Installed Gadgets
     # {url}rest/config/1.0/directory
     check_result = check_unauthenticated_installed_gadgets(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-    # NOT WORKING
-    # Check for Unauthenticated projectkey enumeration
-    # {url}rest/api/2/user/assignable/multiProjectSearch?projectKeys=admin
-    #check_result = check_unauthenticated_projectkey_enumeration(url)
-    #if check_result:  # Only append if check_result is not empty
-    #    vulnerabilities.append(check_result)
-
     # Check for Unauthenticated Issues (with content)
     # {url}rest/api/2/search?jql=ORDER%20BY%20Created
     check_result = check_unauthenticated_issues(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+   # Checks for unauthenticated access to the Issue Link Type API
+    # {url}/rest/api/2/issueLinkType
+    check_result = check_unauthenticated_issue_link_type(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
@@ -157,17 +215,15 @@ def test_jira_vulns(url):
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
-
-    # Checks for unauthenticated access to the Issue Link Type API
-    # {url}/rest/api/2/issueLinkType
-    check_result = check_unauthenticated_issue_link_type(url)
-    if check_result:  # Only append if check_result is not empty
-        vulnerabilities.append(check_result)
-
-    
     # Checks for unauthenticated access to the Priority API
     # {url]/rest/api/2/priority
     check_result = check_unauthenticated_priority_access(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    # Checks for open Jira signup. Manually attempt to signup
+    # {url}secure/Signup!default.jspa
+    check_result = check_open_jira_signup(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 
@@ -291,7 +347,6 @@ def test_jira_vulns(url):
     check_result = check_cve_2023_26256(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
-
 
 
     # -----------------------------------------------------------
@@ -422,30 +477,40 @@ def check_jira(url, path):
         print(f"{Fore.RED}- An error occurred while checking {url}: {e}{Style.RESET_ALL}")
 
 
-def parse_and_check_jira(file_path):
-    """ Parses a text file with URLs and paths, then calls check_jira for each entry """
+def parse_and_check_jira(file_path, module=None):
+    """
+    Parses a text file with URLs and paths, then calls the specified module for each entry.
+    If module is passed in, create the full_url and call the module (modules just expect a url parameter)
+    If no module is passed pass each host to check_jira and run all the checks
+    """
     try:
         with open(file_path, 'r') as file:
             lines = file.readlines()
 
         for line in lines:
-            # Skip empty lines or lines with only whitespace
             if not line.strip():
                 continue
 
-            # Split the line into URL and path
             try:
                 parts = line.strip().split(',')
-                url = parts[0].strip()  # The first part is the URL
-                path = parts[1].strip() if len(parts) > 1 and parts[1].strip() else "/"  # Default path if empty
+                url = parts[0].strip()
+                path = parts[1].strip() if len(parts) > 1 and parts[1].strip() else "/"
                 print(f"{Fore.BLUE}\n[INFO] Processing: URL = {url}, Path = {path}{Style.RESET_ALL}")
-                check_jira(url, path)  # Call the check_jira function
+                full_url = url + path
+
+                if module:
+                    # Dynamically import and run the specified module
+                    module_function = getattr(sys.modules[__name__], module)
+                    module_function(full_url)  # Assume the module takes URL as an argument
+                else:
+                    check_jira(url, path)
             except IndexError:
                 print(f"{Fore.RED}- Error parsing line: {line.strip()}{Style.RESET_ALL}")
     except FileNotFoundError:
         print(f"{Fore.RED}- File not found: {file_path}{Style.RESET_ALL}")
     except Exception as e:
         print(f"{Fore.RED}- An error occurred while processing the file: {e}{Style.RESET_ALL}")
+
 
 
 def main():
@@ -466,20 +531,51 @@ def main():
 
         if args.single:
             if args.module:
+                # process the ones that take start_id & end_id differently
                 if args.module == "check_cve_2020_14185":
                     start_id = args.start_id if args.start_id else 10000
                     end_id = args.end_id if args.end_id else 20000
-                    check_cve_2020_14185(args.single, start_id, end_id)
+                    check_result = check_cve_2020_14185(args.single, args.path, start_id, end_id)
+                    if check_result:  # Only append if check_result is not empty
+                        process_vulnerabilities(check_result)
+
+                elif args.module == "cve_2020_14178_brute":
+                    # /browse.{project_key}
+                    start_id = args.start_id if args.start_id else 2
+                    end_id = args.end_id if args.end_id else 2
+                    check_result = cve_2020_14178_brute(args.single, args.path, start_id, end_id)
+                    if check_result:  # Only append if check_result is not empty
+                        process_vulnerabilities(check_result)
+
                 elif args.module == "check_download_public_issue_attachment":
                     start_id = args.start_id if args.start_id else 10000
                     end_id = args.end_id if args.end_id else 20000
-                    check_download_public_issue_attachment(args.single, start_id, end_id)
+                    check_result = check_download_public_issue_attachment(args.single, args.path, start_id, end_id)
+                    if check_result:  # Only append if check_result is not empty
+                        process_vulnerabilities(check_result)
+
+                elif args.module == "check_unauthenticated_projectkey_enumeration":
+                    # /rest/api/2/user/assignable/multiProjectSearch?projectKeys={project_key}
+                    start_id = args.start_id if args.start_id else 2
+                    end_id = args.end_id if args.end_id else 2
+                    check_result = check_unauthenticated_projectkey_enumeration(args.single, args.path, start_id, end_id)
+                    if check_result:  # Only append if check_result is not empty
+                        process_vulnerabilities(check_result)
+                
+                elif args.module == "projectkey_brute":
+                    # /rest/api/2/project/{project_key}
+                    start_id = args.start_id if args.start_id else 2
+                    end_id = args.end_id if args.end_id else 2
+                    check_result = projectkey_brute(args.single, args.path, start_id, end_id)
+                    if check_result:  # Only append if check_result is not empty
+                        process_vulnerabilities(check_result)
+
                 else:
-                    run_single_check(args.module, args.single)
+                    run_single_check(args.module, args.single, args.path)
             else:
                 check_jira(args.single, args.path)
         elif args.list:
-            parse_and_check_jira(args.list)
+            parse_and_check_jira(args.list, args.module)
     except KeyboardInterrupt:
         print(f"\n{Fore.RED}Detected CTRL+C exiting...{Style.RESET_ALL}")
         sys.exit(0)

