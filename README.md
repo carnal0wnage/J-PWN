@@ -14,6 +14,8 @@ Jira Vulnerability Enumeration
 ## Wiki
 There is an extensive wiki at [https://github.com/carnal0wnage/J-PWN/wiki](https://github.com/carnal0wnage/J-PWN/wiki)
 
+All modules are documented
+
 
 
 ## Quickstart 
