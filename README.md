@@ -37,13 +37,13 @@ pip3 install -r requirements
 `python3 j-pwn.py --list ../jira_hosts.txt --module check_open_jira_signup` (list of hosts | single module)
 
 ### Why
-- more CVE checks
-- HTTP 200 doesn't always mean vuln - do some checks
-- HTTP 200 with Empty restults != vuln or interesting
-- handle ssl errors
-- handle jira at different paths `/, /jira/, /whatever/`
-- brute force modules for projects and issues (and probably others)
-- for fun 
+- More CVE checks
+- HTTP 200 doesn't always mean vuln - validate returned content 
+- HTTP 200 with empty results != vuln or interesting
+- Handle ssl errors and scan the host
+- Handle jira at different paths `/, /jira/, /whatever/`
+- Brute force modules for projects and issues (and probably others - check wiki)
+- For fun `¯\_(ツ)_/¯` 
 
 
 ### Example Data
@@ -121,26 +121,6 @@ ex: Unauthenticated Access to JIRA Project Categories
       Name: Internal
       Description: 
       API URL: https://jira5/jira/rest/api/2/projectCategory/10201
-```
-
-ex: CVE-2019-3403
-```
-+ CVE-2019-3403 Detected
-  URL: https://jira3/jira/rest/api/2/user/picker?query=admin
-  Total Users Found: 0
-  Header: Showing 0 of 0 matching users
-  User Details: No users listed.
-```
-ex: CVE-2019-8449
-```
-+ CVE-2019-8449 Detected
-  URL: https://jira3/jira/rest/api/latest/groupuserpicker?query=1&maxResults=50000&showAvatar=true
-  Total Users Found: 0
-  User Header: Showing 0 of 0 matching users
-  User Details: No users listed.
-  Total Groups Found: 0
-  Group Header: Showing 0 of 0 matching groups
-  Group Details: No groups listed.
 ```
 
 ex: CVE-2019-8442
