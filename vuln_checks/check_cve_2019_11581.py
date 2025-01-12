@@ -16,11 +16,14 @@ def check_cve_2019_11581(url):
     '''
     contact_admin_url = f"{url.rstrip('/')}/secure/ContactAdministrators!default.jspa"
     vulnerabilities = ''
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         print(f"\n{Fore.YELLOW}INFO: Checking for CVE-2019-11581{Style.RESET_ALL}")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {contact_admin_url}")
-        response = requests.get(contact_admin_url, verify=False)
+        response = requests.get(contact_admin_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check for the vulnerability
         if response.status_code == 200:

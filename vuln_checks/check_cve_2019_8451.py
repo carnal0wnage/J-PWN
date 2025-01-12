@@ -16,6 +16,9 @@ def check_cve_2019_8451(base_url, output_folder="loot/"):
     
     # Remove '/jira/' if it exists in the base_url
     base_url = base_url.replace('/jira/', '/')
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         # Test SSRF with a simple payload

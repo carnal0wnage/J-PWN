@@ -15,11 +15,14 @@ def check_open_servicedesk_signup(url):
     '''
     service_desk_url = f"{url.rstrip('/')}/servicedesk/customer/user/signup"
     vulnerabilities = ''
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
         
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for Open Service Desk Signup")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {service_desk_url}")
-        response = requests.get(service_desk_url, allow_redirects=False, verify=False)
+        response = requests.get(service_desk_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check for the vulnerability
         if response.status_code == 200:

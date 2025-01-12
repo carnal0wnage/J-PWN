@@ -15,11 +15,14 @@ def check_cve_2020_14181(url):
     '''
     cve_2020_14181_url = f"{url.rstrip('/')}/secure/ViewUserHover.jspa?username=ishouldntexist"
     vulnerabilities = ''
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
         
     try:
         print(f"\n{Fore.YELLOW}INFO: Checking for CVE-2020-14181{Style.RESET_ALL}")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {cve_2020_14181_url}")
-        response = requests.get(cve_2020_14181_url, allow_redirects=False, verify=False)
+        response = requests.get(cve_2020_14181_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check for the vulnerability
         if response.status_code == 200 and "User does not exist" in response.text:

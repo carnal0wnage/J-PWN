@@ -17,11 +17,14 @@ def check_unauthenticated_projects(url):
     """
     project_url = f"{url.rstrip('/')}/rest/api/2/project?maxResults=100"
     vulnerabilities = ''  # Local vulnerabilities list
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Access to JIRA Projects{Style.RESET_ALL}")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {project_url}")
-        response = requests.get(project_url, verify=False)
+        response = requests.get(project_url, headers=headers, allow_redirects=False, verify=False)
 
         if response.status_code == 200:
             # Parse the JSON response

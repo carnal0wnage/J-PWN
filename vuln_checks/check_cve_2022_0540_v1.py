@@ -16,11 +16,14 @@ def check_cve_2022_0540_v1(url):
     '''
     check_cve_2022_0540_v1_url = f"{url.rstrip('/')}/InsightPluginShowGeneralConfiguration.jspa;"
     vulnerabilities = ''
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         print(f"\n{Fore.YELLOW}INFO: Checking for CVE-2022-0540 (Insight Variant){Style.RESET_ALL}")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {check_cve_2022_0540_v1_url}")
-        response = requests.get(check_cve_2022_0540_v1_url, allow_redirects=False, verify=False)
+        response = requests.get(check_cve_2022_0540_v1_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check for the vulnerability
         if response.status_code == 200:

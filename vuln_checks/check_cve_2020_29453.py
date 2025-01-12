@@ -18,6 +18,9 @@ def check_cve_2020_29453(url):
     print(f"{Fore.YELLOW}\nINFO: Checking for CVE-2020-29453")
     
     vulnerabilities = []  # Initialize the list to store discovered vulnerabilities
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     # List of URLs to check
     urls_to_check = [
@@ -35,7 +38,7 @@ def check_cve_2020_29453(url):
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {target_url}")
         try:
             # Stream response to handle large files
-            response = requests.get(target_url, verify=False, allow_redirects=False, stream=True)
+            response = requests.get(target_url, headers=headers, verify=False, allow_redirects=False, stream=True)
             print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}{Style.RESET_ALL}")
 
             contains_dependency = False  # Flag to check for the keyword

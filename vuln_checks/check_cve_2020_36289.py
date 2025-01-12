@@ -9,11 +9,14 @@ def check_cve_2020_36289(base_url):
     """
     cve_url = f"{base_url.rstrip('/')}/secure/QueryComponentRendererValue!Default.jspa?assignee=user:admin"
     vulnerabilities = ''  # String to store discovered vulnerabilities
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for CVE-2020-36289 (Username Enumeration via QueryComponentRendererValue){Style.RESET_ALL}")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {cve_url}")
-        response = requests.get(cve_url, allow_redirects=False, verify=False)
+        response = requests.get(cve_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check if the response indicates a vulnerability
         if response.status_code == 200:

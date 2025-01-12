@@ -16,11 +16,14 @@ import urllib3
 def check_unauthenticated_admin_projects(url):
     admin_projects_url = f"{url.rstrip('/')}/rest/menu/latest/admin?maxResults=1000"
     vulnerabilities = ''  # Local vulnerabilities list
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Access to JIRA Admin Projects{Style.RESET_ALL}")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {admin_projects_url}")
-        response = requests.get(admin_projects_url, verify=False)
+        response = requests.get(admin_projects_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check for unauthenticated access and parse the response
         if response.status_code == 200:

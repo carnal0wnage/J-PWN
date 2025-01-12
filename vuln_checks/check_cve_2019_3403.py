@@ -16,11 +16,14 @@ def check_cve_2019_3403(url):
     user_picker_url = f"{url.rstrip('/')}/rest/api/2/user/picker?query=admin"
     user_picker_url_brute = f"{url.rstrip('/')}/rest/api/2/user/picker?query=<usernametoguess>"
     vulnerabilities = ''
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for CVE-2019-3403{Style.RESET_ALL}")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {user_picker_url}")
-        response = requests.get(user_picker_url, verify=False)
+        response = requests.get(user_picker_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check for the vulnerability and parse the response
         if response.status_code == 200 and "users" in response.text:

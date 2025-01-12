@@ -5,11 +5,14 @@ from colorama import Fore, Style
 def check_unauthenticated_project_categories(url):
     project_category_url = f"{url.rstrip('/')}/rest/api/2/projectCategory?maxResults=1000"
     vulnerabilities = ''  # Local vulnerabilities list
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Access to JIRA Project Categories{Style.RESET_ALL}")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {project_category_url}")
-        response = requests.get(project_category_url, verify=False)
+        response = requests.get(project_category_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check for unauthenticated access and parse the response
         if response.status_code == 200:

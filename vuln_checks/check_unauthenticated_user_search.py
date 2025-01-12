@@ -9,6 +9,9 @@ def check_unauthenticated_user_search(base_url):
     print(f"\n{Fore.YELLOW}INFO: Checking for Unauthenticated Access to User Search API{Style.RESET_ALL}")
     
     vulnerabilities = ''  # Initialize a string to store discovered vulnerabilities
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         # Construct the target URL
@@ -16,7 +19,7 @@ def check_unauthenticated_user_search(base_url):
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {user_search_url}")
 
         # Send the request
-        response = requests.get(user_search_url, allow_redirects=False, verify=False)
+        response = requests.get(user_search_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check if the response indicates unauthenticated access
         if response.status_code == 200 and any(key in response.text for key in ["name", "key", "emailAddress"]):

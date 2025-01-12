@@ -15,11 +15,14 @@ def check_unauthenticated_user_enumeration(url):
     '''
     unauthenticated_user_enumeration_url = f"{url.rstrip('/')}/secure/popups/UserPickerBrowser.jspa"
     vulnerabilities = ''
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
         
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated User Enumeration (UserPickerBrowser.jspa)")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {unauthenticated_user_enumeration_url}")
-        response = requests.get(unauthenticated_user_enumeration_url, allow_redirects=False, verify=False)
+        response = requests.get(unauthenticated_user_enumeration_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check for the vulnerability
         if response.status_code == 200:

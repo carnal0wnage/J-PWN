@@ -13,11 +13,14 @@ def check_cve_2020_14179(url):
     cve202014179_url = f"{url.rstrip('/')}/secure/QueryComponent!Default.jspa"
     #  rest/secure/QueryComponent!Default.jspa might also work 
     vulnerabilities = ""
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         print(f"\n{Fore.YELLOW}INFO: Checking for CVE-2020-14179{Style.RESET_ALL}")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {cve202014179_url}")
-        response = requests.get(cve202014179_url, verify=False)
+        response = requests.get(cve202014179_url, headers=headers, allow_redirects=False, verify=False)
 
         if response.status_code == 200 and "searchers" in response.text:
             vulnerabilities += f"+ [Info Disclosure] CVE-2020-14179: Sensitive information exposed at {cve202014179_url}"

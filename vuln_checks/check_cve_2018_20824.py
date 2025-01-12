@@ -17,6 +17,9 @@ def check_cve_2018_20824(base_url):
     print(f"\n{Fore.YELLOW}INFO: Checking for CVE-2018-20824 (XSS){Style.RESET_ALL}")
     
     vulnerabilities = ''  # Initialize a list to store discovered vulnerabilities
+    headers = {
+    'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         # Construct the target URL with the XSS payload
@@ -25,7 +28,7 @@ def check_cve_2018_20824(base_url):
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {check_cve_2018_20824_url}")
 
         # Send the request
-        response = requests.get(check_cve_2018_20824_url, allow_redirects=False, verify=False)
+        response = requests.get(check_cve_2018_20824_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check for the XSS payload in the response
         if "XSS12345" in response.text:

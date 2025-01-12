@@ -9,6 +9,9 @@ def check_unauthenticated_issue_link_type(base_url):
     print(f"\n{Fore.YELLOW}INFO: Checking for Unauthenticated Access to Issue Link Type API{Style.RESET_ALL}")
     
     vulnerabilities = ''  # Initialize a string to store discovered vulnerabilities
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         # Construct the target URL
@@ -16,7 +19,7 @@ def check_unauthenticated_issue_link_type(base_url):
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {issue_link_type_url}")
 
         # Send the request
-        response = requests.get(issue_link_type_url, allow_redirects=False, verify=False)
+        response = requests.get(issue_link_type_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check if the response indicates unauthenticated access
         if response.status_code == 200:

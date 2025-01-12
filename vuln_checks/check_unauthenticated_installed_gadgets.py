@@ -16,11 +16,14 @@ def check_unauthenticated_installed_gadgets(url):
     '''
     unauthenticated_installed_gadgets_url = f"{url.rstrip('/')}/rest/config/1.0/directory"
     vulnerabilities = ''
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
         
     try:
         print(f"{Fore.YELLOW}\nChecking for Unauthenticated Installed Gadgets")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {unauthenticated_installed_gadgets_url}")
-        response = requests.get(unauthenticated_installed_gadgets_url, allow_redirects=False, verify=False)
+        response = requests.get(unauthenticated_installed_gadgets_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check for the vulnerability
         if response.status_code == 200 and "jaxbDirectoryContents" in response.text:

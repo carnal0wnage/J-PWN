@@ -16,11 +16,14 @@ def check_unauthenticated_issues(url):
     """
     check_unauthenticated_issues_url = f"{url.rstrip('/')}/rest/api/2/search?jql=ORDER%20BY%20Created&maxResults=2"
     vulnerabilities = ''
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Issues with Content{Style.RESET_ALL}")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {check_unauthenticated_issues_url}")
-        response = requests.get(check_unauthenticated_issues_url, allow_redirects=False, verify=False)
+        response = requests.get(check_unauthenticated_issues_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check for the vulnerability
         if response.status_code == 200:

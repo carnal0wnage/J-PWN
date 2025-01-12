@@ -15,11 +15,14 @@ def check_unauthenticated_popular_dashboard(url):
     '''
     check_unauthenticated_popular_dashboard_url = f"{url.rstrip('/')}/secure/ConfigurePortalPages!default.jspa?view=popular"
     vulnerabilities = ''
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
         
     try:
         print(f"{Fore.YELLOW}\nINFO: IN DEVELOPMENT - Unauthenticated Popular Dashboard")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {check_unauthenticated_popular_dashboard_url}")
-        response = requests.get(check_unauthenticated_popular_dashboard_url, allow_redirects=False, verify=False)
+        response = requests.get(check_unauthenticated_popular_dashboard_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check for the vulnerability
         if response.status_code == 200 and "Shared With" in response.text or "Share with" in response.text or "共享给" in response.text:

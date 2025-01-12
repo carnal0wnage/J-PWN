@@ -8,11 +8,14 @@ def check_unauthenticated_dashboard_access(url):
     """
     dashboard_url = f"{url.rstrip('/')}/rest/api/2/dashboard?maxResults=100"
     vulnerabilities = ''  # Local vulnerabilities list
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         print(f"{Fore.YELLOW}\nINFO: Checking for Unauthenticated Access to JIRA Dashboards{Style.RESET_ALL}")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {dashboard_url}")
-        response = requests.get(dashboard_url, allow_redirects=False, verify=False)
+        response = requests.get(dashboard_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check for unauthenticated access and parse the response
         if response.status_code == 200:

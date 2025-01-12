@@ -15,11 +15,14 @@ def check_cve_2019_8449(url):
     cve_2019_8449_brute = f"{url.rstrip('/')}/rest/api/latest/groupuserpicker?query=<usernametoguess>&maxResults=50000&showAvatar=true"
 
     vulnerabilities = ''
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
     
     try:
         print(f"\n{Fore.YELLOW}INFO: Checking for CVE-2019-8449{Style.RESET_ALL}")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {cve_2019_8449_url}")
-        response = requests.get(cve_2019_8449_url, allow_redirects=False, verify=False)
+        response = requests.get(cve_2019_8449_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check for the vulnerability and parse the response
         if response.status_code == 200 and "users" in response.text:

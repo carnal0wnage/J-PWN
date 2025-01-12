@@ -9,6 +9,9 @@ def check_unauthenticated_priority_access(base_url):
     print(f"\n{Fore.YELLOW}INFO: Checking for Unauthenticated Access to Priority API{Style.RESET_ALL}")
     
     vulnerabilities = ''  # Initialize a string to store discovered vulnerabilities
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         # Construct the target URL
@@ -16,7 +19,7 @@ def check_unauthenticated_priority_access(base_url):
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {priority_url}")
 
         # Send the request
-        response = requests.get(priority_url, allow_redirects=False, verify=False)
+        response = requests.get(priority_url, headers=headers, allow_redirects=False, verify=False)
 
         # Check if the response indicates unauthenticated access
         if response.status_code == 200:

