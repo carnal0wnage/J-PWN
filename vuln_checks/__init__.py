@@ -28,7 +28,9 @@ from .check_cve_2018_20824 import check_cve_2018_20824
 from .check_cve_2019_3401 import check_cve_2019_3401
 from .check_cve_2019_3402 import check_cve_2019_3402
 from .check_cve_2019_3403 import check_cve_2019_3403
+from .cve_2019_3403_brute import cve_2019_3403_brute
 from .check_cve_2019_8449 import check_cve_2019_8449
+from .cve_2019_8449_brute import cve_2019_8449_brute
 from .check_cve_2020_14178 import check_cve_2020_14178
 from .check_cve_2020_14179 import check_cve_2020_14179
 from .check_cve_2020_14181 import check_cve_2020_14181
@@ -77,8 +79,10 @@ __all__ = [
     "check_cve_2019_3401",
     "check_cve_2019_3402",
     "check_cve_2019_3403",
+    "cve_2019_3403_brute",
     "check_cve_2019_8442",
     "check_cve_2019_8449",
+    "cve_2019_8449_brute",
     "check_cve_2019_8451",
     "check_cve_2019_11581",
     "check_cve_2020_14178",

@@ -135,8 +135,6 @@ def test_jira_vulns(url):
     #todo secure/SetupMode!default.jspa https://github.com/projectdiscovery/nuclei-templates/blob/54d78a0552a78cccafa3435bbdd42dff4b568c27/http/misconfiguration/installer/jira-setup.yaml
     # (CVE-2020-36289) /secure/QueryComponentRendererValue!Default.jspa?assignee=user:admin
     #todo secure/SetupMode!default.jspa check that jira is in setup mode
-    #todo /rest/api/2/mypermissions  Returns all permissions in the system and whether the currently logged in user has them. need to query for "havePermission": true,
-
 
     # Check for any permissions as anonymous user
     # {url}/rest/api/2/mypermissions
@@ -546,6 +544,8 @@ def main():
         parser.add_argument("--module", "-m", metavar="MODULE", help="Specify the single module to run (e.g., check_open_jira_signup)")
         parser.add_argument("--start_id", type=int, default=10000, help="Start ID for issue enumeration (default: 10000)")
         parser.add_argument("--end_id", type=int, default=20000, help="End ID for issue enumeration (default: 20000)")
+        parser.add_argument("--dict", "-d", metavar="DICT", help="Specify a dictionary file for username enumeration")
+
 
         args = parser.parse_args()
 
@@ -587,6 +587,20 @@ def main():
                     start_id = args.start_id if args.start_id else 2
                     end_id = args.end_id if args.end_id else 2
                     check_result = projectkey_brute(args.single, args.path, start_id, end_id)
+                    if check_result:  # Only append if check_result is not empty
+                        process_vulnerabilities(check_result)
+
+                elif args.module == "cve_2019_3403_brute" and args.dict:
+                    # /rest/api/2/user/picker?query={username}
+                    print(f"{Fore.BLUE}[INFO] Running module {args.module} with dictionary {args.dict}{Style.RESET_ALL}")
+                    check_result = cve_2019_3403_brute(args.single, args.path, args.dict)
+                    if check_result:  # Only append if check_result is not empty
+                        process_vulnerabilities(check_result)
+                
+                elif args.module == "cve_2019_8449_brute" and args.dict:
+                    # /rest/api/latest/groupuserpicker?query={username}&maxResults=50000&showAvatar=true
+                    print(f"{Fore.BLUE}[INFO] Running module {args.module} with dictionary {args.dict}{Style.RESET_ALL}")
+                    check_result = cve_2019_8449_brute(args.single, args.path, args.dict)
                     if check_result:  # Only append if check_result is not empty
                         process_vulnerabilities(check_result)
 

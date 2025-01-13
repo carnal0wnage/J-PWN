@@ -1,4 +1,4 @@
-Administrators
+administrators
 bulk-import
 confluence-members
 confluence-nospaces
@@ -7,7 +7,7 @@ confluence-owners
 confluence-users
 confluence-visitors
 crucible-users
-Dev-Ops
+dev-ops
 enterprise-approval
 gitlab-developers
 Implementation Team
@@ -15,3 +15,6 @@ jira-administrators
 jira-agile-administrators
 jira-agile-cleareye
 jira-users
+users
+developers
+System-administrators
