@@ -20,6 +20,7 @@ from .check_unauthenticated_priority_access import check_unauthenticated_priorit
 from .check_public_attachment import check_public_attachment #deving
 from .check_download_public_issue_attachment import check_download_public_issue_attachment
 from .check_anonymous_permissions import check_anonymous_permissions
+from .check_jmxmetrics_exposed import check_jmxmetrics_exposed
 from .projectkey_brute import projectkey_brute
 from .cve_2020_14178_brute import cve_2020_14178_brute
 from .check_cve_2017_9506 import check_cve_2017_9506
@@ -68,6 +69,7 @@ __all__ = [
     # "check_public_attachment",
     "check_download_public_issue_attachment",
     "check_anonymous_permissions",
+    "check_jmxmetrics_exposed",
     "projectkey_brute",
     "cve_2020_14178_brute",
     "check_cve_2017_9506",
