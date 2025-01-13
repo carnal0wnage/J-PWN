@@ -1,5 +1,5 @@
 # J-PWN
-Jira Vulnerability Enumeration 
+Jira Vulnerability Scanner (Unauthenticated) 
 ```
              ██╗      ██████╗ ██╗    ██╗███╗   ██╗
              ██║      ██╔══██╗██║    ██║████╗  ██║
