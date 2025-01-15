@@ -316,6 +316,12 @@ def test_jira_vulns(url):
     check_result = check_cve_2020_29453(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
+    
+    # Check for CVE-2020-36238 | CVE-2021-39118
+    # /rest/api/1.0/render
+    check_result = check_cve_2020_36238(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
 
     # Check for CVE-2020-36286
     # {url.rstrip('/')}/rest/api/2/search?jql=assignee%20in%20(membersOf(\"jira-users\"))
