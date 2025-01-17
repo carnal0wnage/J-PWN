@@ -316,7 +316,7 @@ def test_jira_vulns(url):
     check_result = check_cve_2020_29453(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
-    
+
     # Check for CVE-2020-36238 | CVE-2021-39118
     # /rest/api/1.0/render
     check_result = check_cve_2020_36238(url)
@@ -357,6 +357,12 @@ def test_jira_vulns(url):
     # Check for CVE-2022-0540 variant 2
     # {url}secure/WBSGanttManageScheduleJobAction.jspa;"
     check_result = check_cve_2022_0540_v2(url)
+    if check_result:  # Only append if check_result is not empty
+        vulnerabilities.append(check_result)
+
+    # check for CVE CVE-2022-39960
+    # {url}/plugins/servlet/groupexportforjira/admin/json"
+    check_result = check_cve_2022_39960(url)
     if check_result:  # Only append if check_result is not empty
         vulnerabilities.append(check_result)
 

@@ -45,6 +45,7 @@ from .check_cve_2020_36289 import check_cve_2020_36289
 from .check_cve_2021_26086 import check_cve_2021_26086
 from .check_cve_2022_0540_v1 import check_cve_2022_0540_v1
 from .check_cve_2022_0540_v2 import check_cve_2022_0540_v2
+from .check_cve_2022_39960 import check_cve_2022_39960
 from .check_cve_2023_26255 import check_cve_2023_26255
 from .check_cve_2023_26256 import check_cve_2023_26256
 
@@ -97,6 +98,7 @@ __all__ = [
     "check_cve_2021_26086",
     "check_cve_2022_0540_v1",
     "check_cve_2022_0540_v2",
+    "check_cve_2022_39960",
     "check_cve_2023_26255",
     "check_cve_2023_26256",
     # Add more function names here...
